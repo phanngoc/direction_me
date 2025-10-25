@@ -157,6 +157,25 @@ class ProgressTracking(ProgressTrackingBase):
         from_attributes = True
 
 
+# Ikigai schemas
+class IkigaiResponse(BaseModel):
+    success: bool
+    message: str
+    data: dict
+
+
+class CareerSuggestionResponse(BaseModel):
+    success: bool
+    message: str
+    data: List[dict]
+
+
+class CareerAnalysisResponse(BaseModel):
+    success: bool
+    message: str
+    data: dict
+
+
 # API Response schemas
 class MessageResponse(BaseModel):
     message: str
