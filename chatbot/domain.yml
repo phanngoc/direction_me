@@ -9,6 +9,8 @@ intents:
   - ask_help
   - affirm
   - deny
+  - assessment_complete
+  - request_results
 
 entities:
   - user_name
@@ -29,6 +31,12 @@ responses:
   
   utter_help:
     - text: "Tôi có thể giúp bạn: 1) Làm bài đánh giá nghề nghiệp, 2) Xem kết quả đánh giá, 3) Tìm hiểu về các chỉ số IQ, EQ, DQ, AQ. Bạn muốn làm gì?"
+  
+  utter_assessment_redirect:
+    - text: "Tuyệt vời! Tôi sẽ chuyển bạn đến trang đánh giá. Hãy làm bài đánh giá một cách cẩn thận để có kết quả chính xác nhất."
+  
+  utter_results_ready:
+    - text: "Kết quả đánh giá của bạn đã sẵn sàng! Tôi sẽ hiển thị kết quả chi tiết với các biểu đồ và gợi ý nghề nghiệp phù hợp."
 
 actions:
   - action_start_assessment

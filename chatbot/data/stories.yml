@@ -24,6 +24,16 @@ stories:
   - intent: view_results
   - action: action_show_results
 
+- story: assessment complete
+  steps:
+  - intent: assessment_complete
+  - action: utter_results_ready
+
+- story: request results
+  steps:
+  - intent: request_results
+  - action: action_show_results
+
 - story: ask for help
   steps:
   - intent: ask_help

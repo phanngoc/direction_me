@@ -38,16 +38,16 @@
 
 **Goal**: Implement core infrastructure required by all user stories
 
-- [ ] T011 [P] Create database models for all entities in backend/src/models/
-- [ ] T012 [P] Implement database migrations for all tables
-- [ ] T013 [P] Create Redis session management service in backend/src/services/session.py
-- [ ] T014 [P] Implement authentication middleware in backend/src/middleware/auth.py
-- [ ] T015 [P] Setup Rasa chatbot configuration in chatbot/config.yml
-- [ ] T016 [P] Create shared TypeScript interfaces in shared/types/
-- [ ] T017 [P] Implement API base classes in backend/src/api/
-- [ ] T018 [P] Setup WebSocket connection handling in backend/src/websocket/
-- [ ] T019 [P] Create assessment question data loader in backend/src/scripts/load_questions.py
-- [ ] T020 [P] Implement career recommendation engine in backend/src/services/career_service.py
+- [x] T011 [P] Create database models for all entities in backend/src/models/
+- [x] T012 [P] Implement database migrations for all tables
+- [x] T013 [P] Create Redis session management service in backend/src/services/session.py
+- [x] T014 [P] Implement authentication middleware in backend/src/middleware/auth.py
+- [x] T015 [P] Setup Rasa chatbot configuration in chatbot/config.yml
+- [x] T016 [P] Create shared TypeScript interfaces in shared/types/
+- [x] T017 [P] Implement API base classes in backend/src/api/
+- [x] T018 [P] Setup WebSocket connection handling in backend/src/websocket/
+- [x] T019 [P] Create assessment question data loader in backend/src/scripts/load_questions.py
+- [x] T020 [P] Implement career recommendation engine in backend/src/services/career_service.py
 
 ## Phase 3: User Story 1 - Complete Assessment via Chatbot Interface (P1)
 
@@ -57,34 +57,34 @@
 
 ### Chatbot Interface Implementation
 
-- [ ] T021 [US1] Create chatbot session management in backend/src/chatbot/session_service.py
-- [ ] T022 [US1] Implement chatbot message processing in backend/src/chatbot/message_service.py
-- [ ] T023 [US1] Create chatbot API endpoints in backend/src/api/chatbot.py
-- [ ] T024 [US1] Implement chatbot conversation flow in chatbot/domain.yml
-- [ ] T025 [US1] Create chatbot training data in chatbot/data/
-- [ ] T026 [US1] Build chatbot interface components in frontend/src/chatbot/
-- [ ] T027 [US1] Implement WebSocket chatbot communication in frontend/src/services/chatbot_ws.ts
-- [ ] T028 [US1] Create chatbot message display components in frontend/src/chatbot/MessageDisplay.tsx
+- [x] T021 [US1] Create chatbot session management in backend/src/chatbot/session_service.py
+- [x] T022 [US1] Implement chatbot message processing in backend/src/chatbot/message_service.py
+- [x] T023 [US1] Create chatbot API endpoints in backend/src/api/chatbot.py
+- [x] T024 [US1] Implement chatbot conversation flow in chatbot/domain.yml
+- [x] T025 [US1] Create chatbot training data in chatbot/data/
+- [x] T026 [US1] Build chatbot interface components in frontend/src/chatbot/
+- [x] T027 [US1] Implement WebSocket chatbot communication in frontend/src/services/chatbot_ws.ts
+- [x] T028 [US1] Create chatbot message display components in frontend/src/chatbot/MessageDisplay.tsx
 
 ### Assessment Page Implementation
 
-- [ ] T029 [US1] Create assessment session management in backend/src/assessment/session_service.py
-- [ ] T030 [US1] Implement assessment question loading in backend/src/assessment/question_service.py
-- [ ] T031 [US1] Create assessment API endpoints in backend/src/api/assessment.py
-- [ ] T032 [US1] Build assessment page components in frontend/src/assessment/
-- [ ] T033 [US1] Implement question navigation in frontend/src/assessment/QuestionNavigation.tsx
-- [ ] T034 [US1] Create assessment progress tracking in frontend/src/assessment/ProgressTracker.tsx
-- [ ] T035 [US1] Implement assessment response submission in frontend/src/assessment/ResponseSubmitter.tsx
+- [x] T029 [US1] Create assessment session management in backend/src/assessment/session_service.py
+- [x] T030 [US1] Implement assessment question loading in backend/src/assessment/question_service.py
+- [x] T031 [US1] Create assessment API endpoints in backend/src/api/assessment.py
+- [x] T032 [US1] Build assessment page components in frontend/src/assessment/
+- [x] T033 [US1] Implement question navigation in frontend/src/assessment/QuestionNavigation.tsx
+- [x] T034 [US1] Create assessment progress tracking in frontend/src/assessment/ProgressTracker.tsx
+- [x] T035 [US1] Implement assessment response submission in frontend/src/assessment/ResponseSubmitter.tsx
 
 ### Results Visualization Implementation
 
-- [ ] T036 [US1] Create assessment scoring engine in backend/src/assessment/scoring_service.py
-- [ ] T037 [US1] Implement results calculation in backend/src/assessment/results_service.py
-- [ ] T038 [US1] Create results API endpoints in backend/src/api/results.py
-- [ ] T039 [US1] Build radar chart component in frontend/src/visualization/RadarChart.tsx
-- [ ] T040 [US1] Create facet bars component in frontend/src/visualization/FacetBars.tsx
-- [ ] T041 [US1] Implement Ikigai map component in frontend/src/visualization/IkigaiMap.tsx
-- [ ] T042 [US1] Create results display page in frontend/src/visualization/ResultsPage.tsx
+- [x] T036 [US1] Create assessment scoring engine in backend/src/assessment/scoring_service.py
+- [x] T037 [US1] Implement results calculation in backend/src/assessment/results_service.py
+- [x] T038 [US1] Create results API endpoints in backend/src/api/results.py
+- [x] T039 [US1] Build radar chart component in frontend/src/visualization/RadarChart.tsx
+- [x] T040 [US1] Create facet bars component in frontend/src/visualization/FacetBars.tsx
+- [x] T041 [US1] Implement Ikigai map component in frontend/src/visualization/IkigaiMap.tsx
+- [x] T042 [US1] Create results display page in frontend/src/visualization/ResultsPage.tsx
 
 ## Phase 4: User Story 2 - Navigate Assessment Questions with Progress Tracking (P2)
 

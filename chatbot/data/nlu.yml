@@ -43,6 +43,22 @@ nlu:
     - kết quả của tôi
     - xem kết quả test
 
+- intent: assessment_complete
+  examples: |
+    - tôi đã hoàn thành đánh giá
+    - làm xong bài test
+    - hoàn thành đánh giá
+    - đã trả lời hết câu hỏi
+    - kết thúc đánh giá
+
+- intent: request_results
+  examples: |
+    - cho tôi xem kết quả
+    - hiển thị kết quả
+    - tôi muốn biết kết quả
+    - xem điểm số
+    - kết quả như thế nào
+
 - intent: ask_help
   examples: |
     - giúp tôi
