@@ -78,6 +78,9 @@ Người dùng có thể làm lại bài test định kỳ để theo dõi sự 
 - What happens when kết quả 4 chỉ số đều bằng nhau?
 - How does system handle khi không có nghề nghiệp nào phù hợp với profile người dùng?
 - What happens when người dùng muốn xóa kết quả test cũ?
+- What happens when hệ thống gặp lỗi trong quá trình tính toán?
+- How does system handle khi database connection bị mất?
+- What happens when người dùng nhập dữ liệu không hợp lệ?
 
 ## Requirements *(mandatory)*
 
@@ -93,16 +96,34 @@ Người dùng có thể làm lại bài test định kỳ để theo dõi sự 
 - **FR-008**: System MUST lưu trữ kết quả test và lịch sử phát triển của người dùng
 - **FR-009**: System MUST cho phép người dùng làm lại test và so sánh kết quả
 - **FR-010**: System MUST hiển thị báo cáo tiến trình phát triển theo thời gian
-- **FR-011**: System MUST đảm bảo tính bảo mật và riêng tư của dữ liệu người dùng
+- **FR-023**: System MUST yêu cầu password tối thiểu 8 ký tự cho tài khoản người dùng
+- **FR-024**: System MUST sử dụng relational database (PostgreSQL/MySQL) để lưu trữ dữ liệu
+- **FR-027**: System MUST hiển thị giao diện responsive trên mobile và desktop
+- **FR-028**: System MUST ưu tiên mobile-first design cho trải nghiệm người dùng
 - **FR-012**: System MUST hoạt động ổn định với ít nhất 1000 người dùng đồng thời
+- **FR-013**: System MUST tính toán điểm số IQ với trọng số độ khó cho từng câu hỏi
+- **FR-014**: System MUST chuẩn hóa điểm Likert scale từ 1-5 thành thang 0-100
+- **FR-015**: System MUST tính toán 4 trục Ikigai (Love, Good at, World needs, Paid for) theo công thức toán học
+- **FR-016**: System MUST sử dụng harmonic mean để tính điểm Ikigai tổng hợp
+- **FR-017**: System MUST đánh giá độ phù hợp nghề nghiệp dựa trên vector profile 16 chiều
+- **FR-018**: System MUST áp dụng ngưỡng tối thiểu và trọng số cho từng nghề nghiệp
+- **FR-019**: System MUST cung cấp giải thích AI về lý do gợi ý nghề nghiệp
+- **FR-020**: System MUST tạo lộ trình học tập dựa trên thư viện roadmap có sẵn
+- **FR-021**: System MUST cho phép cấu hình trọng số và ngưỡng nghề nghiệp qua JSON
+- **FR-022**: System MUST phát hiện và cảnh báo mất cân bằng trong 4 trục Ikigai
 
 ### Key Entities *(include if feature involves data)*
 
 - **User Profile**: Thông tin cá nhân, kết quả test, lịch sử phát triển, lộ trình học tập
 - **Assessment Result**: Điểm số 4 chỉ số IQ, EQ, DQ, AQ, thời gian test, phân tích Ikigai
-- **Career Suggestion**: Nghề nghiệp gợi ý, lý do phù hợp, mức độ phù hợp
+- **Profile Vector**: Vector 16 chiều chứa điểm số tất cả facets (IQ_LR, IQ_NR, IQ_VR, IQ_SR, EQ_Emp, EQ_Soc, EQ_SAw, EQ_SReg, DQ_IL, DQ_Cr, DQ_Sf, DQ_Co, AQ_C, AQ_O, AQ_R, AQ_E)
+- **Ikigai Scores**: 4 trục Love, Good at, World needs, Paid for và điểm tổng hợp harmonic/geometric
+- **Career Rules**: Trọng số, ngưỡng tối thiểu, bonus keys cho từng nghề nghiệp
+- **Career Suggestion**: Nghề nghiệp gợi ý, điểm phù hợp, lý do cụ thể, giải thích AI
 - **Learning Path**: Khóa học, sách, dự án, timeline, mức độ ưu tiên
+- **Roadmap Library**: Thư viện kỹ năng, dự án, thói quen cho từng nghề nghiệp
 - **Progress Tracking**: Lịch sử test, so sánh kết quả, biểu đồ tiến trình
+- **Algorithm Config**: Cấu hình JSON cho trọng số nghề nghiệp, A/B testing
 
 ## Success Criteria *(mandatory)*
 
@@ -116,6 +137,77 @@ Người dùng có thể làm lại bài test định kỳ để theo dõi sự 
 - **SC-006**: 70% người dùng quay lại sử dụng hệ thống trong vòng 30 ngày
 - **SC-007**: Người dùng có thể truy cập lộ trình học tập và theo dõi tiến trình mọi lúc
 - **SC-008**: Giảm 50% thời gian người dùng cần để tìm hiểu về nghề nghiệp phù hợp
+- **SC-009**: Thuật toán tính điểm có độ chính xác >95% so với đánh giá thủ công
+- **SC-010**: Hệ thống mapping nghề nghiệp có thể xử lý 8+ nghề với độ phù hợp >70%
+- **SC-011**: Giải thích AI cho gợi ý nghề nghiệp được 85% người dùng hiểu và chấp nhận
+- **SC-012**: Lộ trình học tập được cá nhân hóa dựa trên top-1 nghề nghiệp phù hợp
+- **SC-013**: Hệ thống phát hiện mất cân bằng Ikigai với độ chính xác >90%
+- **SC-014**: Hệ thống đáp ứng yêu cầu cơ bản về performance cho 1000 người dùng đồng thời
+- **SC-015**: Thời gian tải trang không vượt quá 3 giây trên kết nối internet thông thường
+
+## Mathematical Assessment Algorithm *(technical)*
+
+### Scoring Methodology
+
+**IQ Assessment (MCQ with weighted difficulty)**:
+- Formula: `S_IQ = 100 * (Σ(d_i * r_i)) / Σ(d_i)`
+- Where: `d_i` = difficulty weight, `r_i` = correct/incorrect (0/1)
+- Facets: Logical Reasoning (LR), Numerical Reasoning (NR), Verbal Reasoning (VR), Spatial Reasoning (SR)
+
+**EQ/DQ/AQ Assessment (Likert scale)**:
+- Normalization: `t_j = (6-x_j) if reverse else x_j`, then `t̂_j = 25*(t_j-1)`
+- Domain score: `S_D = (1/|G_D|) * Σ(S_D,facet)`
+- EQ facets: Empathy, Social Skills, Self-Awareness, Self-Regulation
+- DQ facets: Information Literacy, Creativity, Safety, Collaboration
+- AQ facets: Control, Ownership, Reach, Endurance
+
+### Ikigai Calculation
+
+**Four Axes (0-100 scale)**:
+- **Love (L)**: `mean(S_EQ,Empathy, S_EQ,Social, S_DQ,Creativity, S_INT)`
+- **Good at (G)**: `0.6*S_IQ + 0.4*mean(S_DQ,IL, S_DQ,Cr, S_DQ,Co)`
+- **World needs (W)**: `mean(S_EQ,Empathy, S_EQ,Social, S_DQ,Collaboration)`
+- **Paid for (P)**: `max(φ_c(profile))` across all careers
+
+**Ikigai Score**:
+- Harmonic mean: `I_harm = 4 / (1/L + 1/G + 1/W + 1/P)`
+- Geometric mean: `I_geo = (L*G*W*P)^0.25`
+
+### Career Mapping Algorithm
+
+**Profile Vector**: 16-dimensional vector `z` containing all facet scores
+
+**Career Fit Score**: `φ_c(z) = (Σ w_c,k * z_k) * Π 1[z_m ≥ T_c,m]`
+- Where: `w_c` = career weights, `T_c` = minimum thresholds
+- Bonus: `+2%` per bonus axis exceeding 80 points
+
+**Career Rules Database**:
+- 8 predefined careers with weights, thresholds, and bonus keys
+- JSON-configurable for A/B testing and market adaptation
+- Explainable AI: Shows which facets contributed to high scores
+
+### Learning Path Generation
+
+**Roadmap Library**: Pre-defined skill sets, projects, and habits for each career
+- **Skills**: Technical competencies to develop
+- **Projects**: Hands-on practice opportunities  
+- **Habits**: Daily/weekly routines for skill building
+
+**Personalization Logic**:
+- Based on top career match
+- Considers current skill gaps
+- Provides 2-week starter roadmap
+- Includes progress tracking milestones
+
+## Clarifications
+
+### Session 2024-12-19
+
+- Q: Security & Privacy Requirements → A: Basic security - chỉ cần HTTPS và password protection
+- Q: Error Handling & Recovery → A: Basic error handling - chỉ hiển thị generic error messages
+- Q: Data Persistence & Storage → A: Standard database - PostgreSQL/MySQL với backup và data retention
+- Q: User Interface & Accessibility → A: Basic responsive design - mobile-first, desktop support
+- Q: Performance & Scalability → A: Basic performance - chỉ đảm bảo hoạt động cơ bản
 
 ## Assumptions
 
@@ -124,3 +216,5 @@ Người dùng có thể làm lại bài test định kỳ để theo dõi sự 
 - Người dùng sẵn sàng dành 15-20 phút để hoàn thành bài test
 - Dữ liệu nghề nghiệp và khóa học được cập nhật định kỳ
 - Người dùng muốn nhận được gợi ý cụ thể và có thể thực hiện được
+- Thuật toán đánh giá dựa trên nghiên cứu tâm lý học và thống kê
+- Hệ thống mapping nghề nghiệp có thể điều chỉnh theo thị trường Việt Nam

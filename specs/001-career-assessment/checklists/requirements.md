@@ -35,4 +35,8 @@
 - Tất cả user stories đều có acceptance scenarios rõ ràng
 - Success criteria đều có thể đo lường được và không phụ thuộc vào công nghệ
 - Không có [NEEDS CLARIFICATION] markers nào cần làm rõ
+- **MỚI**: Đã bổ sung thuật toán đánh giá toán học chi tiết từ pipeline_math.md
+- **MỚI**: Thêm 10 functional requirements mới cho thuật toán (FR-013 đến FR-022)
+- **MỚI**: Thêm 5 success criteria mới cho độ chính xác thuật toán (SC-009 đến SC-013)
+- **MỚI**: Bổ sung Key Entities cho Profile Vector, Ikigai Scores, Career Rules, Roadmap Library
 - Specification sẵn sàng cho bước tiếp theo `/speckit.clarify` hoặc `/speckit.plan`
