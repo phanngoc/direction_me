@@ -7,7 +7,7 @@ Dưới đây là **bản thiết kế ý tưởng sản phẩm MVP** dựa trê
 **Sản phẩm:** “MyWay – Tìm đường riêng của bạn”
 **Mục tiêu:**
 
-* Đánh giá 4 chỉ số phát triển toàn diện (IQ, EQ, DQ, AQ).
+* Đánh giá 4 chỉ số phát triển toàn diện (IQ, EQg, DQ, AQ).
 * Gợi ý hướng đi học tập, nghề nghiệp, và mục tiêu sống (theo mô hình Ikigai).
 * Cung cấp lộ trình học tập, kỹ năng, và trải nghiệm gợi ý phù hợp từng cá nhân.
 
