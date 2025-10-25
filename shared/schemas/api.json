@@ -1,0 +1,137 @@
+{
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string", "format": "uuid"},
+        "email": {"type": "string", "format": "email"},
+        "full_name": {"type": "string"},
+        "age": {"type": "integer", "minimum": 16, "maximum": 25},
+        "created_at": {"type": "string", "format": "date-time"},
+        "updated_at": {"type": "string", "format": "date-time"}
+      },
+      "required": ["id", "email", "full_name", "age", "created_at", "updated_at"]
+    },
+    "CreateUserRequest": {
+      "type": "object",
+      "properties": {
+        "email": {"type": "string", "format": "email"},
+        "password": {"type": "string", "minLength": 8},
+        "full_name": {"type": "string", "minLength": 1},
+        "age": {"type": "integer", "minimum": 16, "maximum": 25}
+      },
+      "required": ["email", "password", "full_name", "age"]
+    },
+    "LoginRequest": {
+      "type": "object",
+      "properties": {
+        "email": {"type": "string", "format": "email"},
+        "password": {"type": "string"}
+      },
+      "required": ["email", "password"]
+    },
+    "Assessment": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string", "format": "uuid"},
+        "user_id": {"type": "string", "format": "uuid"},
+        "status": {"type": "string", "enum": ["in_progress", "completed", "abandoned"]},
+        "started_at": {"type": "string", "format": "date-time"},
+        "completed_at": {"type": "string", "format": "date-time"},
+        "total_questions": {"type": "integer", "minimum": 0},
+        "answered_questions": {"type": "integer", "minimum": 0}
+      },
+      "required": ["id", "user_id", "status", "started_at", "total_questions", "answered_questions"]
+    },
+    "Question": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string", "format": "uuid"},
+        "category": {"type": "string", "enum": ["IQ", "EQ", "DQ", "AQ"]},
+        "facet": {"type": "string"},
+        "question_text": {"type": "string"},
+        "question_type": {"type": "string", "enum": ["MCQ", "Likert"]},
+        "options": {"type": "array", "items": {"type": "string"}},
+        "difficulty_weight": {"type": "number", "minimum": 0},
+        "reverse_score": {"type": "boolean"}
+      },
+      "required": ["id", "category", "facet", "question_text", "question_type", "reverse_score"]
+    },
+    "Answer": {
+      "type": "object",
+      "properties": {
+        "question_id": {"type": "string", "format": "uuid"},
+        "answer_value": {"type": "integer"},
+        "answer_text": {"type": "string"}
+      },
+      "required": ["question_id", "answer_value"]
+    },
+    "AssessmentResult": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string", "format": "uuid"},
+        "assessment_id": {"type": "string", "format": "uuid"},
+        "iq_score": {"type": "number", "minimum": 0, "maximum": 100},
+        "eq_score": {"type": "number", "minimum": 0, "maximum": 100},
+        "dq_score": {"type": "number", "minimum": 0, "maximum": 100},
+        "aq_score": {"type": "number", "minimum": 0, "maximum": 100},
+        "ikigai_love": {"type": "number", "minimum": 0, "maximum": 100},
+        "ikigai_good_at": {"type": "number", "minimum": 0, "maximum": 100},
+        "ikigai_world_needs": {"type": "number", "minimum": 0, "maximum": 100},
+        "ikigai_paid_for": {"type": "number", "minimum": 0, "maximum": 100},
+        "ikigai_harmonic": {"type": "number", "minimum": 0, "maximum": 100},
+        "ikigai_geometric": {"type": "number", "minimum": 0, "maximum": 100},
+        "calculated_at": {"type": "string", "format": "date-time"}
+      },
+      "required": ["id", "assessment_id", "calculated_at"]
+    },
+    "CareerSuggestion": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string", "format": "uuid"},
+        "career_name": {"type": "string"},
+        "fit_score": {"type": "number", "minimum": 0, "maximum": 100},
+        "rank": {"type": "integer", "minimum": 1, "maximum": 8},
+        "explanation": {"type": "string"}
+      },
+      "required": ["id", "career_name", "fit_score", "rank"]
+    },
+    "LearningPath": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string", "format": "uuid"},
+        "career_name": {"type": "string"},
+        "skills": {"type": "array", "items": {"type": "string"}},
+        "projects": {"type": "array", "items": {"type": "string"}},
+        "habits": {"type": "array", "items": {"type": "string"}},
+        "timeline_weeks": {"type": "integer", "minimum": 1},
+        "priority": {"type": "string", "enum": ["high", "medium", "low"]}
+      },
+      "required": ["id", "career_name", "skills", "projects", "habits", "timeline_weeks", "priority"]
+    },
+    "ProgressTracking": {
+      "type": "object",
+      "properties": {
+        "id": {"type": "string", "format": "uuid"},
+        "user_id": {"type": "string", "format": "uuid"},
+        "assessment_id": {"type": "string", "format": "uuid"},
+        "previous_assessment_id": {"type": "string", "format": "uuid"},
+        "improvement_iq": {"type": "number"},
+        "improvement_eq": {"type": "number"},
+        "improvement_dq": {"type": "number"},
+        "improvement_aq": {"type": "number"},
+        "tracked_at": {"type": "string", "format": "date-time"}
+      },
+      "required": ["id", "user_id", "assessment_id", "tracked_at"]
+    },
+    "ApiError": {
+      "type": "object",
+      "properties": {
+        "error": {"type": "string"},
+        "message": {"type": "string"},
+        "details": {"type": "string"}
+      },
+      "required": ["error", "message"]
+    }
+  }
+}

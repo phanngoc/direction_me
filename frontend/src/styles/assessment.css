@@ -1,0 +1,317 @@
+/* Assessment-specific styles with mobile-first responsive design */
+
+/* Mobile-first base styles */
+.assessment-container {
+  @apply min-h-screen bg-gray-50;
+}
+
+.assessment-card {
+  @apply bg-white rounded-lg shadow-md p-4 mx-4;
+}
+
+.assessment-header {
+  @apply text-center mb-6;
+}
+
+.assessment-title {
+  @apply text-2xl font-bold text-gray-900 mb-2;
+}
+
+.assessment-subtitle {
+  @apply text-gray-600 text-sm;
+}
+
+/* Progress bar styles */
+.progress-container {
+  @apply mb-6;
+}
+
+.progress-info {
+  @apply flex justify-between text-xs text-gray-600 mb-2;
+}
+
+.progress-bar {
+  @apply w-full bg-gray-200 rounded-full h-2;
+}
+
+.progress-fill {
+  @apply h-2 rounded-full transition-all duration-300 bg-blue-600;
+}
+
+/* Question card styles */
+.question-card {
+  @apply bg-white rounded-lg shadow-md p-4 mb-6;
+}
+
+.question-header {
+  @apply mb-4;
+}
+
+.question-category {
+  @apply text-xs font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full inline-block mb-2;
+}
+
+.question-type {
+  @apply text-xs text-gray-500 ml-2;
+}
+
+.question-text {
+  @apply text-lg font-semibold text-gray-900 leading-relaxed;
+}
+
+/* Answer options styles */
+.answer-options {
+  @apply space-y-3;
+}
+
+.answer-option {
+  @apply flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors;
+}
+
+.answer-option input[type="radio"] {
+  @apply mr-3 text-blue-600 focus:ring-blue-500;
+}
+
+.answer-option label {
+  @apply text-gray-700 cursor-pointer flex-1;
+}
+
+/* Likert scale specific styles */
+.likert-scale {
+  @apply space-y-4;
+}
+
+.likert-labels {
+  @apply flex justify-between text-xs text-gray-500 mb-4;
+}
+
+.likert-options {
+  @apply space-y-3;
+}
+
+.likert-option {
+  @apply flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors;
+}
+
+/* Navigation styles */
+.navigation-container {
+  @apply flex justify-between mt-6;
+}
+
+.nav-button {
+  @apply px-4 py-2 rounded-lg font-semibold transition-colors;
+}
+
+.nav-button:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+.nav-button-primary {
+  @apply bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+}
+
+.nav-button-secondary {
+  @apply bg-gray-200 text-gray-800 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+}
+
+/* Answer summary styles */
+.answer-summary {
+  @apply mt-4 p-3 bg-gray-50 rounded-lg;
+}
+
+.answer-summary-title {
+  @apply font-semibold text-gray-700 mb-2 text-sm;
+}
+
+.answer-summary-text {
+  @apply text-xs text-gray-600;
+}
+
+/* Tablet styles (md: 768px+) */
+@media (min-width: 768px) {
+  .assessment-container {
+    @apply py-8;
+  }
+  
+  .assessment-card {
+    @apply mx-auto max-w-4xl p-6;
+  }
+  
+  .assessment-title {
+    @apply text-3xl;
+  }
+  
+  .assessment-subtitle {
+    @apply text-base;
+  }
+  
+  .question-card {
+    @apply p-6;
+  }
+  
+  .question-text {
+    @apply text-xl;
+  }
+  
+  .answer-option {
+    @apply p-4;
+  }
+  
+  .likert-option {
+    @apply p-4;
+  }
+  
+  .navigation-container {
+    @apply mt-8;
+  }
+  
+  .nav-button {
+    @apply px-6 py-3 text-base;
+  }
+}
+
+/* Desktop styles (lg: 1024px+) */
+@media (min-width: 1024px) {
+  .assessment-container {
+    @apply py-12;
+  }
+  
+  .assessment-card {
+    @apply max-w-5xl;
+  }
+  
+  .question-card {
+    @apply p-8;
+  }
+  
+  .question-text {
+    @apply text-2xl;
+  }
+  
+  .answer-options {
+    @apply space-y-4;
+  }
+  
+  .answer-option {
+    @apply p-5;
+  }
+  
+  .likert-options {
+    @apply space-y-4;
+  }
+  
+  .likert-option {
+    @apply p-5;
+  }
+}
+
+/* Large desktop styles (xl: 1280px+) */
+@media (min-width: 1280px) {
+  .assessment-card {
+    @apply max-w-6xl;
+  }
+  
+  .question-card {
+    @apply p-10;
+  }
+}
+
+/* Loading states */
+.loading-container {
+  @apply min-h-screen bg-gray-50 flex items-center justify-center;
+}
+
+.loading-spinner {
+  @apply animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4;
+}
+
+.loading-text {
+  @apply text-gray-600;
+}
+
+/* Error states */
+.error-container {
+  @apply min-h-screen bg-gray-50 flex items-center justify-center;
+}
+
+.error-icon {
+  @apply text-red-600 text-6xl mb-4;
+}
+
+.error-title {
+  @apply text-2xl font-bold text-gray-900 mb-2;
+}
+
+.error-message {
+  @apply text-gray-600 mb-4;
+}
+
+.error-actions {
+  @apply space-x-4;
+}
+
+/* Success states */
+.success-container {
+  @apply min-h-screen bg-gray-50 flex items-center justify-center;
+}
+
+.success-icon {
+  @apply text-green-600 text-6xl mb-4;
+}
+
+.success-title {
+  @apply text-2xl font-bold text-gray-900 mb-2;
+}
+
+.success-message {
+  @apply text-gray-600 mb-4;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .progress-fill,
+  .answer-option,
+  .likert-option,
+  .nav-button {
+    @apply transition-none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .answer-option,
+  .likert-option {
+    @apply border-2 border-gray-400;
+  }
+  
+  .answer-option:hover,
+  .likert-option:hover {
+    @apply bg-gray-100 border-gray-600;
+  }
+}
+
+/* Focus styles for keyboard navigation */
+.answer-option:focus-within,
+.likert-option:focus-within {
+  @apply ring-2 ring-blue-500 ring-offset-2;
+}
+
+.nav-button:focus {
+  @apply outline-none;
+}
+
+/* Print styles */
+@media print {
+  .assessment-container {
+    @apply bg-white;
+  }
+  
+  .navigation-container,
+  .answer-summary {
+    @apply hidden;
+  }
+  
+  .question-card {
+    @apply shadow-none border border-gray-300;
+  }
+}

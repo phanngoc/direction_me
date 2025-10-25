@@ -1,0 +1,241 @@
+{
+  "questions": [
+    {
+      "category": "IQ",
+      "facet": "LR",
+      "question_text": "Nếu tất cả con mèo đều là động vật và tất cả động vật đều cần thức ăn, thì tất cả con mèo đều cần thức ăn. Điều này đúng hay sai?",
+      "question_type": "MCQ",
+      "options": ["Đúng", "Sai", "Không thể xác định", "Cần thêm thông tin"],
+      "difficulty_weight": 1.0,
+      "reverse_score": false
+    },
+    {
+      "category": "IQ",
+      "facet": "LR",
+      "question_text": "Trong dãy số: 2, 4, 8, 16, 32, ?. Số tiếp theo là gì?",
+      "question_type": "MCQ",
+      "options": ["48", "64", "56", "40"],
+      "difficulty_weight": 1.2,
+      "reverse_score": false
+    },
+    {
+      "category": "IQ",
+      "facet": "NR",
+      "question_text": "Nếu một cửa hàng giảm giá 20% cho tất cả sản phẩm, và sau đó giảm thêm 15% cho khách hàng VIP, thì tổng mức giảm giá cho khách VIP là bao nhiêu?",
+      "question_type": "MCQ",
+      "options": ["35%", "32%", "30%", "28%"],
+      "difficulty_weight": 1.5,
+      "reverse_score": false
+    },
+    {
+      "category": "IQ",
+      "facet": "VR",
+      "question_text": "Từ nào sau đây KHÔNG cùng nhóm với các từ còn lại?",
+      "question_type": "MCQ",
+      "options": ["Sách", "Tạp chí", "Báo", "Máy tính"],
+      "difficulty_weight": 1.0,
+      "reverse_score": false
+    },
+    {
+      "category": "IQ",
+      "facet": "SR",
+      "question_text": "Nếu bạn gấp một tờ giấy hình vuông theo đường chéo, sau đó cắt một lỗ tròn ở giữa, khi mở ra sẽ có bao nhiêu lỗ?",
+      "question_type": "MCQ",
+      "options": ["1", "2", "4", "8"],
+      "difficulty_weight": 1.8,
+      "reverse_score": false
+    },
+    {
+      "category": "EQ",
+      "facet": "Empathy",
+      "question_text": "Khi thấy một người bạn đang khóc, tôi thường:",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": false
+    },
+    {
+      "category": "EQ",
+      "facet": "Empathy",
+      "question_text": "Tôi dễ dàng hiểu được cảm xúc của người khác thông qua nét mặt và cử chỉ",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": false
+    },
+    {
+      "category": "EQ",
+      "facet": "Social",
+      "question_text": "Tôi thích làm việc nhóm hơn làm việc một mình",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": false
+    },
+    {
+      "category": "EQ",
+      "facet": "Social",
+      "question_text": "Tôi thường là người khởi xướng các cuộc trò chuyện trong nhóm",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": true
+    },
+    {
+      "category": "EQ",
+      "facet": "SelfAwareness",
+      "question_text": "Tôi thường xuyên suy nghĩ về điểm mạnh và điểm yếu của bản thân",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": false
+    },
+    {
+      "category": "EQ",
+      "facet": "SelfAwareness",
+      "question_text": "Tôi biết rõ những gì khiến tôi cảm thấy căng thẳng",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": false
+    },
+    {
+      "category": "EQ",
+      "facet": "SelfRegulation",
+      "question_text": "Khi tức giận, tôi thường có thể kiểm soát được cảm xúc của mình",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": false
+    },
+    {
+      "category": "EQ",
+      "facet": "SelfRegulation",
+      "question_text": "Tôi thường phản ứng ngay lập tức khi có điều gì đó không như ý",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": true
+    },
+    {
+      "category": "DQ",
+      "facet": "InfoLiteracy",
+      "question_text": "Tôi biết cách đánh giá độ tin cậy của thông tin trên internet",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": false
+    },
+    {
+      "category": "DQ",
+      "facet": "InfoLiteracy",
+      "question_text": "Tôi thường kiểm tra nhiều nguồn trước khi tin tưởng một thông tin",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": false
+    },
+    {
+      "category": "DQ",
+      "facet": "Creativity",
+      "question_text": "Tôi thích tạo ra nội dung số như video, podcast, hoặc blog",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": false
+    },
+    {
+      "category": "DQ",
+      "facet": "Creativity",
+      "question_text": "Tôi thường nghĩ ra những ý tưởng mới khi sử dụng công nghệ",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": false
+    },
+    {
+      "category": "DQ",
+      "facet": "Safety",
+      "question_text": "Tôi luôn cập nhật mật khẩu và sử dụng xác thực hai yếu tố",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": false
+    },
+    {
+      "category": "DQ",
+      "facet": "Safety",
+      "question_text": "Tôi thường chia sẻ thông tin cá nhân trên mạng xã hội",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": true
+    },
+    {
+      "category": "DQ",
+      "facet": "Collaboration",
+      "question_text": "Tôi thích sử dụng các công cụ cộng tác trực tuyến như Google Docs, Slack",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": false
+    },
+    {
+      "category": "DQ",
+      "facet": "Collaboration",
+      "question_text": "Tôi thường gặp khó khăn khi làm việc nhóm qua các nền tảng số",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": true
+    },
+    {
+      "category": "AQ",
+      "facet": "Control",
+      "question_text": "Khi gặp khó khăn, tôi tin rằng mình có thể kiểm soát được tình hình",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": false
+    },
+    {
+      "category": "AQ",
+      "facet": "Control",
+      "question_text": "Tôi thường cảm thấy bất lực khi đối mặt với thử thách",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": true
+    },
+    {
+      "category": "AQ",
+      "facet": "Ownership",
+      "question_text": "Tôi thường đổ lỗi cho hoàn cảnh khi mọi việc không như ý",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": true
+    },
+    {
+      "category": "AQ",
+      "facet": "Ownership",
+      "question_text": "Tôi chịu trách nhiệm về kết quả của những quyết định mình đưa ra",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": false
+    },
+    {
+      "category": "AQ",
+      "facet": "Reach",
+      "question_text": "Tôi tin rằng khó khăn hiện tại sẽ ảnh hưởng đến nhiều khía cạnh khác trong cuộc sống",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": true
+    },
+    {
+      "category": "AQ",
+      "facet": "Reach",
+      "question_text": "Tôi có thể tách biệt các vấn đề và không để chúng ảnh hưởng lẫn nhau",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": false
+    },
+    {
+      "category": "AQ",
+      "facet": "Endurance",
+      "question_text": "Tôi có thể duy trì tinh thần tích cực ngay cả khi gặp khó khăn kéo dài",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": false
+    },
+    {
+      "category": "AQ",
+      "facet": "Endurance",
+      "question_text": "Tôi thường bỏ cuộc khi gặp thử thách khó khăn",
+      "question_type": "Likert",
+      "difficulty_weight": 1.0,
+      "reverse_score": true
+    }
+  ]
+}

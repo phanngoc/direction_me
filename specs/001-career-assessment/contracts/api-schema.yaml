@@ -1,0 +1,526 @@
+openapi: 3.0.3
+info:
+  title: MyWay Career Assessment API
+  description: API for career assessment system with IQ, EQ, DQ, AQ evaluation and Ikigai analysis
+  version: 1.0.0
+  contact:
+    name: MyWay Team
+    email: support@myway.com
+
+servers:
+  - url: https://api.myway.com/v1
+    description: Production server
+  - url: https://staging-api.myway.com/v1
+    description: Staging server
+
+paths:
+  # Authentication endpoints
+  /auth/register:
+    post:
+      summary: Register new user
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password, full_name, age]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "student@university.edu"
+                password:
+                  type: string
+                  minLength: 8
+                  example: "securepass123"
+                full_name:
+                  type: string
+                  example: "Nguyễn Văn A"
+                age:
+                  type: integer
+                  minimum: 16
+                  maximum: 25
+                  example: 20
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                    format: uuid
+                  message:
+                    type: string
+        '400':
+          description: Invalid input
+        '409':
+          description: Email already exists
+
+  /auth/login:
+    post:
+      summary: Login user
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+        '401':
+          description: Invalid credentials
+
+  # Assessment endpoints
+  /assessments:
+    post:
+      summary: Start new assessment
+      tags: [Assessment]
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Assessment started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assessment'
+        '401':
+          description: Unauthorized
+
+  /assessments/{assessment_id}:
+    get:
+      summary: Get assessment details
+      tags: [Assessment]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: assessment_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Assessment details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assessment'
+        '404':
+          description: Assessment not found
+
+  /assessments/{assessment_id}/questions:
+    get:
+      summary: Get assessment questions
+      tags: [Assessment]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: assessment_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: category
+          in: query
+          schema:
+            type: string
+            enum: [IQ, EQ, DQ, AQ]
+      responses:
+        '200':
+          description: Questions for assessment
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  questions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Question'
+
+  /assessments/{assessment_id}/answers:
+    post:
+      summary: Submit assessment answers
+      tags: [Assessment]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: assessment_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                answers:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Answer'
+      responses:
+        '200':
+          description: Answers submitted successfully
+        '400':
+          description: Invalid answers
+
+  /assessments/{assessment_id}/complete:
+    post:
+      summary: Complete assessment and get results
+      tags: [Assessment]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: assessment_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Assessment completed with results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssessmentResult'
+        '400':
+          description: Assessment not ready for completion
+
+  # Results endpoints
+  /results/{assessment_id}:
+    get:
+      summary: Get assessment results
+      tags: [Results]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: assessment_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Assessment results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssessmentResult'
+        '404':
+          description: Results not found
+
+  /results/{assessment_id}/careers:
+    get:
+      summary: Get career suggestions
+      tags: [Results]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: assessment_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Career suggestions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  careers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CareerSuggestion'
+
+  /results/{assessment_id}/learning-path:
+    get:
+      summary: Get personalized learning path
+      tags: [Results]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: assessment_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Learning path
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LearningPath'
+
+  # Progress tracking endpoints
+  /users/{user_id}/progress:
+    get:
+      summary: Get user progress history
+      tags: [Progress]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Progress history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  progress:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProgressTracking'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        full_name:
+          type: string
+        age:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+
+    Assessment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [in_progress, completed, abandoned]
+        started_at:
+          type: string
+          format: date-time
+        completed_at:
+          type: string
+          format: date-time
+        total_questions:
+          type: integer
+        answered_questions:
+          type: integer
+
+    Question:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        category:
+          type: string
+          enum: [IQ, EQ, DQ, AQ]
+        facet:
+          type: string
+        question_text:
+          type: string
+        question_type:
+          type: string
+          enum: [MCQ, Likert]
+        options:
+          type: array
+          items:
+            type: string
+        difficulty_weight:
+          type: number
+        reverse_score:
+          type: boolean
+
+    Answer:
+      type: object
+      properties:
+        question_id:
+          type: string
+          format: uuid
+        answer_value:
+          type: integer
+        answer_text:
+          type: string
+
+    AssessmentResult:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        assessment_id:
+          type: string
+          format: uuid
+        iq_score:
+          type: number
+          format: float
+        eq_score:
+          type: number
+          format: float
+        dq_score:
+          type: number
+          format: float
+        aq_score:
+          type: number
+          format: float
+        ikigai_love:
+          type: number
+          format: float
+        ikigai_good_at:
+          type: number
+          format: float
+        ikigai_world_needs:
+          type: number
+          format: float
+        ikigai_paid_for:
+          type: number
+          format: float
+        ikigai_harmonic:
+          type: number
+          format: float
+        ikigai_geometric:
+          type: number
+          format: float
+        calculated_at:
+          type: string
+          format: date-time
+
+    CareerSuggestion:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        career_name:
+          type: string
+        fit_score:
+          type: number
+          format: float
+        rank:
+          type: integer
+        explanation:
+          type: string
+
+    LearningPath:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        career_name:
+          type: string
+        skills:
+          type: array
+          items:
+            type: string
+        projects:
+          type: array
+          items:
+            type: string
+        habits:
+          type: array
+          items:
+            type: string
+        timeline_weeks:
+          type: integer
+        priority:
+          type: string
+          enum: [high, medium, low]
+
+    ProgressTracking:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        assessment_id:
+          type: string
+          format: uuid
+        previous_assessment_id:
+          type: string
+          format: uuid
+        improvement_iq:
+          type: number
+          format: float
+        improvement_eq:
+          type: number
+          format: float
+        improvement_dq:
+          type: number
+          format: float
+        improvement_aq:
+          type: number
+          format: float
+        tracked_at:
+          type: string
+          format: date-time
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        details:
+          type: string
