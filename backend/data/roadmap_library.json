@@ -1,0 +1,605 @@
+{
+  "roadmap_library": {
+    "version": "1.0.0",
+    "last_updated": "2024-12-19",
+    "description": "Comprehensive learning roadmap library for MyWay Career Assessment System",
+    "careers": {
+      "Software Engineer": {
+        "description": "Full-stack software development with modern technologies",
+        "timeline_weeks": 24,
+        "difficulty": "intermediate",
+        "skills": {
+          "foundational": [
+            {
+              "name": "Programming Fundamentals",
+              "description": "Core programming concepts and problem-solving",
+              "weeks": 4,
+              "resources": [
+                "Python/JavaScript basics",
+                "Data structures and algorithms",
+                "Object-oriented programming"
+              ],
+              "projects": [
+                "Build a calculator app",
+                "Create a simple game",
+                "Implement sorting algorithms"
+              ]
+            },
+            {
+              "name": "Version Control",
+              "description": "Git and GitHub workflow",
+              "weeks": 2,
+              "resources": [
+                "Git basics and commands",
+                "Branching and merging",
+                "Collaborative workflows"
+              ],
+              "projects": [
+                "Set up GitHub repository",
+                "Contribute to open source project"
+              ]
+            }
+          ],
+          "frontend": [
+            {
+              "name": "HTML/CSS/JavaScript",
+              "description": "Web development fundamentals",
+              "weeks": 6,
+              "resources": [
+                "HTML5 semantic elements",
+                "CSS3 styling and layout",
+                "JavaScript ES6+ features",
+                "DOM manipulation"
+              ],
+              "projects": [
+                "Personal portfolio website",
+                "Interactive web application",
+                "Responsive landing page"
+              ]
+            },
+            {
+              "name": "React Framework",
+              "description": "Modern frontend development",
+              "weeks": 8,
+              "resources": [
+                "React components and hooks",
+                "State management",
+                "Routing and navigation",
+                "Testing with Jest"
+              ],
+              "projects": [
+                "Todo application",
+                "E-commerce frontend",
+                "Real-time chat app"
+              ]
+            }
+          ],
+          "backend": [
+            {
+              "name": "Node.js/Express",
+              "description": "Server-side JavaScript development",
+              "weeks": 6,
+              "resources": [
+                "Node.js runtime",
+                "Express.js framework",
+                "RESTful API design",
+                "Middleware concepts"
+              ],
+              "projects": [
+                "REST API for blog",
+                "Authentication system",
+                "File upload service"
+              ]
+            },
+            {
+              "name": "Database Management",
+              "description": "Data storage and retrieval",
+              "weeks": 4,
+              "resources": [
+                "SQL fundamentals",
+                "PostgreSQL/MySQL",
+                "Database design",
+                "Query optimization"
+              ],
+              "projects": [
+                "Database schema design",
+                "Complex queries",
+                "Data migration scripts"
+              ]
+            }
+          ],
+          "advanced": [
+            {
+              "name": "Cloud Deployment",
+              "description": "Deploying applications to cloud platforms",
+              "weeks": 4,
+              "resources": [
+                "AWS/Azure/GCP basics",
+                "Docker containerization",
+                "CI/CD pipelines",
+                "Monitoring and logging"
+              ],
+              "projects": [
+                "Deploy full-stack app",
+                "Set up CI/CD pipeline",
+                "Implement monitoring"
+              ]
+            }
+          ]
+        },
+        "habits": [
+          {
+            "name": "Daily Coding Practice",
+            "description": "Code for at least 1 hour every day",
+            "frequency": "daily",
+            "duration_weeks": 24
+          },
+          {
+            "name": "Code Review Participation",
+            "description": "Review and contribute to open source projects",
+            "frequency": "weekly",
+            "duration_weeks": 24
+          },
+          {
+            "name": "Technical Blog Writing",
+            "description": "Write about learning experiences and technical insights",
+            "frequency": "bi-weekly",
+            "duration_weeks": 24
+          }
+        ]
+      },
+      "Data Scientist": {
+        "description": "Data analysis and machine learning expertise",
+        "timeline_weeks": 28,
+        "difficulty": "advanced",
+        "skills": {
+          "foundational": [
+            {
+              "name": "Python for Data Science",
+              "description": "Core Python libraries for data analysis",
+              "weeks": 6,
+              "resources": [
+                "NumPy for numerical computing",
+                "Pandas for data manipulation",
+                "Matplotlib/Seaborn for visualization",
+                "Jupyter Notebooks"
+              ],
+              "projects": [
+                "Data cleaning and preprocessing",
+                "Exploratory data analysis",
+                "Statistical analysis project"
+              ]
+            },
+            {
+              "name": "Statistics and Mathematics",
+              "description": "Mathematical foundations for data science",
+              "weeks": 8,
+              "resources": [
+                "Descriptive and inferential statistics",
+                "Probability theory",
+                "Linear algebra",
+                "Calculus basics"
+              ],
+              "projects": [
+                "Statistical hypothesis testing",
+                "A/B testing analysis",
+                "Correlation and regression analysis"
+              ]
+            }
+          ],
+          "machine_learning": [
+            {
+              "name": "Machine Learning Fundamentals",
+              "description": "Core ML algorithms and concepts",
+              "weeks": 10,
+              "resources": [
+                "Scikit-learn library",
+                "Supervised learning algorithms",
+                "Unsupervised learning",
+                "Model evaluation and validation"
+              ],
+              "projects": [
+                "Classification model for customer churn",
+                "Clustering analysis",
+                "Recommendation system"
+              ]
+            },
+            {
+              "name": "Deep Learning",
+              "description": "Neural networks and deep learning",
+              "weeks": 8,
+              "resources": [
+                "TensorFlow/PyTorch",
+                "Neural network architectures",
+                "Computer vision",
+                "Natural language processing"
+              ],
+              "projects": [
+                "Image classification model",
+                "Text sentiment analysis",
+                "Time series forecasting"
+              ]
+            }
+          ],
+          "data_engineering": [
+            {
+              "name": "Big Data Technologies",
+              "description": "Handling large-scale data",
+              "weeks": 6,
+              "resources": [
+                "Apache Spark",
+                "Hadoop ecosystem",
+                "Data pipelines",
+                "Cloud data platforms"
+              ],
+              "projects": [
+                "ETL pipeline development",
+                "Real-time data processing",
+                "Data warehouse design"
+              ]
+            }
+          ]
+        },
+        "habits": [
+          {
+            "name": "Daily Data Analysis",
+            "description": "Analyze a new dataset every day",
+            "frequency": "daily",
+            "duration_weeks": 28
+          },
+          {
+            "name": "Kaggle Competition Participation",
+            "description": "Participate in monthly Kaggle competitions",
+            "frequency": "monthly",
+            "duration_weeks": 28
+          },
+          {
+            "name": "Research Paper Reading",
+            "description": "Read and summarize ML research papers",
+            "frequency": "weekly",
+            "duration_weeks": 28
+          }
+        ]
+      },
+      "UX Designer": {
+        "description": "User experience design and research",
+        "timeline_weeks": 20,
+        "difficulty": "intermediate",
+        "skills": {
+          "foundational": [
+            {
+              "name": "Design Principles",
+              "description": "Core design theory and principles",
+              "weeks": 4,
+              "resources": [
+                "Color theory and typography",
+                "Layout and composition",
+                "Visual hierarchy",
+                "Design systems"
+              ],
+              "projects": [
+                "Design system creation",
+                "Brand identity design",
+                "Visual style guide"
+              ]
+            },
+            {
+              "name": "User Research",
+              "description": "Understanding user needs and behaviors",
+              "weeks": 6,
+              "resources": [
+                "User interviews and surveys",
+                "Persona development",
+                "User journey mapping",
+                "Usability testing"
+              ],
+              "projects": [
+                "User research study",
+                "Persona creation",
+                "User journey analysis"
+              ]
+            }
+          ],
+          "design_tools": [
+            {
+              "name": "Figma Mastery",
+              "description": "Professional design tool proficiency",
+              "weeks": 4,
+              "resources": [
+                "Figma interface and features",
+                "Component libraries",
+                "Prototyping and animations",
+                "Collaboration features"
+              ],
+              "projects": [
+                "Mobile app design",
+                "Website wireframes",
+                "Interactive prototypes"
+              ]
+            },
+            {
+              "name": "Adobe Creative Suite",
+              "description": "Additional design tools",
+              "weeks": 3,
+              "resources": [
+                "Photoshop for image editing",
+                "Illustrator for vector graphics",
+                "After Effects for animations"
+              ],
+              "projects": [
+                "Marketing materials design",
+                "Animated prototypes",
+                "Icon and illustration creation"
+              ]
+            }
+          ],
+          "specialized": [
+            {
+              "name": "Interaction Design",
+              "description": "Designing user interactions",
+              "weeks": 3,
+              "resources": [
+                "Micro-interactions",
+                "Information architecture",
+                "Navigation design",
+                "Accessibility principles"
+              ],
+              "projects": [
+                "Interactive prototype",
+                "Accessibility audit",
+                "Navigation redesign"
+              ]
+            }
+          ]
+        },
+        "habits": [
+          {
+            "name": "Daily Design Practice",
+            "description": "Create one design exercise daily",
+            "frequency": "daily",
+            "duration_weeks": 20
+          },
+          {
+            "name": "Design Inspiration Collection",
+            "description": "Collect and analyze design inspiration",
+            "frequency": "daily",
+            "duration_weeks": 20
+          },
+          {
+            "name": "User Feedback Collection",
+            "description": "Gather feedback on designs from users",
+            "frequency": "weekly",
+            "duration_weeks": 20
+          }
+        ]
+      },
+      "Marketing Manager": {
+        "description": "Digital marketing and brand management",
+        "timeline_weeks": 16,
+        "difficulty": "intermediate",
+        "skills": {
+          "foundational": [
+            {
+              "name": "Marketing Fundamentals",
+              "description": "Core marketing concepts and strategies",
+              "weeks": 4,
+              "resources": [
+                "Marketing mix (4Ps)",
+                "Consumer behavior",
+                "Market research",
+                "Brand positioning"
+              ],
+              "projects": [
+                "Marketing strategy development",
+                "Brand analysis",
+                "Market research report"
+              ]
+            },
+            {
+              "name": "Digital Marketing",
+              "description": "Online marketing channels and tactics",
+              "weeks": 6,
+              "resources": [
+                "SEO and SEM",
+                "Social media marketing",
+                "Email marketing",
+                "Content marketing"
+              ],
+              "projects": [
+                "SEO optimization campaign",
+                "Social media strategy",
+                "Email marketing campaign"
+              ]
+            }
+          ],
+          "analytics": [
+            {
+              "name": "Marketing Analytics",
+              "description": "Data-driven marketing decisions",
+              "weeks": 4,
+              "resources": [
+                "Google Analytics",
+                "Marketing attribution",
+                "ROI measurement",
+                "A/B testing"
+              ],
+              "projects": [
+                "Analytics dashboard creation",
+                "Campaign performance analysis",
+                "A/B test implementation"
+              ]
+            }
+          ],
+          "tools": [
+            {
+              "name": "Marketing Tools",
+              "description": "Professional marketing software",
+              "weeks": 2,
+              "resources": [
+                "HubSpot/Salesforce",
+                "Hootsuite/Buffer",
+                "Canva/Adobe Creative",
+                "Mailchimp/Constant Contact"
+              ],
+              "projects": [
+                "Marketing automation setup",
+                "Social media management",
+                "Email campaign creation"
+              ]
+            }
+          ]
+        },
+        "habits": [
+          {
+            "name": "Industry News Reading",
+            "description": "Stay updated with marketing trends",
+            "frequency": "daily",
+            "duration_weeks": 16
+          },
+          {
+            "name": "Campaign Analysis",
+            "description": "Analyze successful marketing campaigns",
+            "frequency": "weekly",
+            "duration_weeks": 16
+          },
+          {
+            "name": "Networking Events",
+            "description": "Attend marketing meetups and conferences",
+            "frequency": "monthly",
+            "duration_weeks": 16
+          }
+        ]
+      }
+    },
+    "skill_categories": {
+      "technical": [
+        "Programming",
+        "Data Analysis",
+        "Database Management",
+        "Cloud Computing",
+        "Cybersecurity",
+        "Machine Learning",
+        "Web Development",
+        "Mobile Development"
+      ],
+      "soft_skills": [
+        "Communication",
+        "Leadership",
+        "Problem Solving",
+        "Critical Thinking",
+        "Creativity",
+        "Adaptability",
+        "Teamwork",
+        "Time Management"
+      ],
+      "domain_specific": [
+        "User Experience Design",
+        "Digital Marketing",
+        "Project Management",
+        "Business Analysis",
+        "Financial Analysis",
+        "Content Creation",
+        "Sales",
+        "Customer Service"
+      ]
+    },
+    "learning_resources": {
+      "platforms": [
+        {
+          "name": "Coursera",
+          "description": "University-level courses",
+          "focus": "academic",
+          "cost": "paid"
+        },
+        {
+          "name": "Udemy",
+          "description": "Practical skill courses",
+          "focus": "practical",
+          "cost": "paid"
+        },
+        {
+          "name": "freeCodeCamp",
+          "description": "Free coding bootcamp",
+          "focus": "programming",
+          "cost": "free"
+        },
+        {
+          "name": "Khan Academy",
+          "description": "Free educational content",
+          "focus": "foundational",
+          "cost": "free"
+        },
+        {
+          "name": "YouTube",
+          "description": "Video tutorials and lectures",
+          "focus": "varied",
+          "cost": "free"
+        }
+      ],
+      "certifications": [
+        {
+          "name": "Google Analytics",
+          "career": "Marketing Manager",
+          "difficulty": "intermediate",
+          "duration_weeks": 2
+        },
+        {
+          "name": "AWS Certified Solutions Architect",
+          "career": "Software Engineer",
+          "difficulty": "advanced",
+          "duration_weeks": 8
+        },
+        {
+          "name": "Google UX Design Certificate",
+          "career": "UX Designer",
+          "difficulty": "intermediate",
+          "duration_weeks": 6
+        }
+      ]
+    },
+    "project_templates": {
+      "beginner": [
+        {
+          "name": "Personal Portfolio",
+          "description": "Create a personal website showcasing your work",
+          "skills": ["HTML", "CSS", "JavaScript"],
+          "duration_weeks": 2
+        },
+        {
+          "name": "Todo Application",
+          "description": "Build a simple task management app",
+          "skills": ["React", "Node.js", "Database"],
+          "duration_weeks": 3
+        }
+      ],
+      "intermediate": [
+        {
+          "name": "E-commerce Website",
+          "description": "Full-stack online store",
+          "skills": ["Full-stack Development", "Payment Integration", "Database Design"],
+          "duration_weeks": 6
+        },
+        {
+          "name": "Data Analysis Dashboard",
+          "description": "Interactive dashboard for data visualization",
+          "skills": ["Python", "Data Visualization", "Web Development"],
+          "duration_weeks": 4
+        }
+      ],
+      "advanced": [
+        {
+          "name": "Machine Learning Model",
+          "description": "End-to-end ML project with deployment",
+          "skills": ["Machine Learning", "Cloud Computing", "API Development"],
+          "duration_weeks": 8
+        },
+        {
+          "name": "Mobile App with Backend",
+          "description": "Cross-platform mobile app with server",
+          "skills": ["Mobile Development", "Backend Development", "Database"],
+          "duration_weeks": 10
+        }
+      ]
+    }
+  }
+}

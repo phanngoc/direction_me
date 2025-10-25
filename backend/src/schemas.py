@@ -176,6 +176,25 @@ class CareerAnalysisResponse(BaseModel):
     data: dict
 
 
+# Learning Path schemas
+class LearningPathResponse(BaseModel):
+    success: bool
+    message: str
+    data: dict
+
+
+class LearningPathListResponse(BaseModel):
+    success: bool
+    message: str
+    data: List[dict]
+
+
+class LearningRecommendationsResponse(BaseModel):
+    success: bool
+    message: str
+    data: dict
+
+
 # API Response schemas
 class MessageResponse(BaseModel):
     message: str

@@ -106,13 +106,13 @@ Hệ thống đánh giá 4 chỉ số IQ, EQ, DQ, AQ và định hướng nghề
 - [x] T060 [US2] Tạo career suggestions page trong frontend/src/pages/careers.tsx
 - [x] T061 [US2] Implement career rules configuration trong backend/data/career_rules.json
 - [x] T062 [US2] Tạo career explanation generation logic trong backend/src/utils/explanation_generator.py
-- [ ] T063 [US2] Implement career fit score calculation trong backend/src/algorithms/career_fit.py
-- [ ] T064 [US2] Tạo career comparison component trong frontend/src/components/CareerComparison.tsx
-- [ ] T065 [US2] Implement career rules management trong backend/src/services/career_rule_service.py
-- [ ] T066 [US2] Tạo unit tests cho Ikigai algorithm trong backend/tests/unit/test_ikigai.py
-- [ ] T067 [US2] Tạo unit tests cho career mapping trong backend/tests/unit/test_career_mapping.py
-- [ ] T068 [US2] Tạo integration tests cho career API trong backend/tests/integration/test_careers.py
-- [ ] T069 [US2] Tạo E2E tests cho Ikigai flow trong frontend/tests/e2e/ikigai.spec.ts
+- [x] T063 [US2] Implement career fit score calculation trong backend/src/algorithms/career_fit.py
+- [x] T064 [US2] Tạo career comparison component trong frontend/src/components/CareerComparison.tsx
+- [x] T065 [US2] Implement career rules management trong backend/src/services/career_rule_service.py
+- [x] T066 [US2] Tạo unit tests cho Ikigai algorithm trong backend/tests/unit/test_ikigai.py
+- [x] T067 [US2] Tạo unit tests cho career mapping trong backend/tests/unit/test_career_mapping.py
+- [x] T068 [US2] Tạo integration tests cho career API trong backend/tests/integration/test_careers.py
+- [x] T069 [US2] Tạo E2E tests cho Ikigai flow trong frontend/tests/e2e/ikigai.spec.ts
 
 ## Phase 5: User Story 3 - Lộ trình học tập cá nhân hóa (P2)
 
