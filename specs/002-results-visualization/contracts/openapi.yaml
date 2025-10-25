@@ -1,0 +1,730 @@
+openapi: 3.0.3
+info:
+  title: Assessment Results Visualization API
+  description: |
+    API for calculating assessment scores, retrieving visualization data, and accessing
+    response analytics for the four-domain assessment system (IQ, EQ, DQ, AQ).
+  version: 1.0.0
+  contact:
+    name: Direction Me Team
+
+servers:
+  - url: http://localhost:3000/api
+    description: Local development server
+  - url: https://api.direction-me.com/api
+    description: Production server
+
+tags:
+  - name: Results
+    description: Assessment results and visualization data retrieval
+  - name: Scores
+    description: Score calculation and management
+  - name: Analytics
+    description: Response analytics and consistency checking
+  - name: Careers
+    description: Career recommendations based on scores
+
+paths:
+  /results/{userId}:
+    get:
+      summary: Get visualization data for user
+      description: |
+        Retrieves all visualization data for a user including radar chart data,
+        facet bar chart data, and Ikigai career map data. Returns cached data
+        if available, otherwise calculates and caches results.
+      operationId: getResults
+      tags:
+        - Results
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: User identifier
+      responses:
+        '200':
+          description: Visualization data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VisualizationData'
+        '404':
+          description: User not found or no assessment data available
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /results/{userId}/radar:
+    get:
+      summary: Get radar chart data only
+      description: Retrieves four-domain radar chart data for optimized rendering
+      operationId: getRadarData
+      tags:
+        - Results
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Radar chart data retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RadarChartData'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /results/{userId}/facets:
+    get:
+      summary: Get facet bar chart data
+      description: Retrieves detailed facet-level scores for all domains
+      operationId: getFacetData
+      tags:
+        - Results
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: domain
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [IQ, EQ, DQ, AQ]
+          description: Filter by specific domain
+      responses:
+        '200':
+          description: Facet data retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacetChartData'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /results/{userId}/careers:
+    get:
+      summary: Get career recommendations (Ikigai map)
+      description: |
+        Retrieves career recommendations based on user scores with Ikigai
+        intersection zone placement
+      operationId: getCareerRecommendations
+      tags:
+        - Results
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Career recommendations retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IkigaiMapData'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /scores/calculate:
+    post:
+      summary: Calculate scores from assessment responses
+      description: |
+        Triggers score calculation for a completed assessment session.
+        Calculates domain scores, facet scores, and normalizes to 0-100 scale.
+      operationId: calculateScores
+      tags:
+        - Scores
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculateScoresRequest'
+      responses:
+        '200':
+          description: Scores calculated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoreCalculationResult'
+        '400':
+          description: Invalid request (incomplete assessment, invalid data)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Calculation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /scores/{userId}/domain/{domain}:
+    get:
+      summary: Get domain-level score
+      description: Retrieves normalized score for a specific domain
+      operationId: getDomainScore
+      tags:
+        - Scores
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: domain
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [IQ, EQ, DQ, AQ]
+      responses:
+        '200':
+          description: Domain score retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainScore'
+        '404':
+          description: Score not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /analytics/{assessmentId}:
+    get:
+      summary: Get response analytics for assessment session
+      description: |
+        Retrieves timing analytics, consistency scores, and retest recommendations
+        for a completed assessment
+      operationId: getAnalytics
+      tags:
+        - Analytics
+      parameters:
+        - name: assessmentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Analytics retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseAnalytics'
+        '404':
+          description: Assessment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /analytics/consistency:
+    post:
+      summary: Run consistency check on assessment responses
+      description: |
+        Analyzes Likert responses for contradictions using semantic pair analysis.
+        Returns consistency score and flagged contradictory pairs.
+      operationId: checkConsistency
+      tags:
+        - Analytics
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsistencyCheckRequest'
+      responses:
+        '200':
+          description: Consistency analysis complete
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsistencyCheckResult'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /careers/match:
+    post:
+      summary: Match careers to user scores
+      description: |
+        Finds careers matching user score thresholds and returns them
+        grouped by Ikigai intersection zones
+      operationId: matchCareers
+      tags:
+        - Careers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CareerMatchRequest'
+      responses:
+        '200':
+          description: Career matches found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CareerMatchResult'
+        '400':
+          description: Invalid scores
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /careers/{careerId}:
+    get:
+      summary: Get career details
+      description: Retrieves detailed information about a specific career
+      operationId: getCareer
+      tags:
+        - Careers
+      parameters:
+        - name: careerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Career details retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Career'
+        '404':
+          description: Career not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    VisualizationData:
+      type: object
+      required:
+        - radarChartData
+        - facetChartData
+        - ikigaiMapData
+        - calculatedAt
+      properties:
+        radarChartData:
+          $ref: '#/components/schemas/RadarChartData'
+        facetChartData:
+          $ref: '#/components/schemas/FacetChartData'
+        ikigaiMapData:
+          $ref: '#/components/schemas/IkigaiMapData'
+        calculatedAt:
+          type: string
+          format: date-time
+          description: When data was calculated/cached
+
+    RadarChartData:
+      type: object
+      required:
+        - IQ
+        - EQ
+        - DQ
+        - AQ
+      properties:
+        IQ:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Normalized IQ score
+        EQ:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Normalized EQ score
+        DQ:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Normalized DQ score
+        AQ:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Normalized AQ score
+
+    FacetChartData:
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          $ref: '#/components/schemas/FacetScore'
+      description: Facet scores grouped by domain (e.g., {"IQ": [...], "EQ": [...]})
+
+    FacetScore:
+      type: object
+      required:
+        - facetName
+        - score
+        - normalizedScore
+      properties:
+        facetName:
+          type: string
+          description: Name of facet (e.g., "Logical", "Self-awareness")
+        score:
+          type: number
+          description: Raw facet score
+        normalizedScore:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Normalized facet score
+
+    IkigaiMapData:
+      type: object
+      required:
+        - recommendedCareers
+      properties:
+        recommendedCareers:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntersectionZone'
+
+    IntersectionZone:
+      type: object
+      required:
+        - zone
+        - careers
+      properties:
+        zone:
+          type: string
+          description: Intersection zone identifier (e.g., "IQ+EQ", "IQ+EQ+DQ")
+        careers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CareerRecommendation'
+
+    CareerRecommendation:
+      type: object
+      required:
+        - name
+        - rationale
+      properties:
+        name:
+          type: string
+          description: Career name
+        rationale:
+          type: string
+          description: Why this career matches user scores
+
+    CalculateScoresRequest:
+      type: object
+      required:
+        - userId
+        - assessmentId
+        - domain
+      properties:
+        userId:
+          type: string
+          format: uuid
+        assessmentId:
+          type: string
+          format: uuid
+        domain:
+          type: string
+          enum: [IQ, EQ, DQ, AQ]
+          description: Domain to calculate scores for
+
+    ScoreCalculationResult:
+      type: object
+      required:
+        - domain
+        - rawDomainScore
+        - normalizedScore
+        - facetScores
+        - totalItems
+        - completionPercentage
+      properties:
+        domain:
+          type: string
+          enum: [IQ, EQ, DQ, AQ]
+        rawDomainScore:
+          type: number
+          description: Pre-normalization score
+        normalizedScore:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Score on 0-100 scale
+        percentileRank:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: User's percentile compared to all users
+        facetScores:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/FacetScoreDetail'
+        totalItems:
+          type: integer
+          description: Total questions answered
+        completionPercentage:
+          type: number
+          minimum: 0
+          maximum: 100
+
+    FacetScoreDetail:
+      type: object
+      required:
+        - rawScore
+        - normalizedScore
+        - itemCount
+      properties:
+        rawScore:
+          type: number
+        normalizedScore:
+          type: number
+          minimum: 0
+          maximum: 100
+        itemCount:
+          type: integer
+          description: Number of questions in facet
+
+    DomainScore:
+      type: object
+      required:
+        - domain
+        - normalizedScore
+      properties:
+        domain:
+          type: string
+          enum: [IQ, EQ, DQ, AQ]
+        normalizedScore:
+          type: number
+          minimum: 0
+          maximum: 100
+        percentileRank:
+          type: number
+          minimum: 0
+          maximum: 100
+
+    ResponseAnalytics:
+      type: object
+      required:
+        - assessmentId
+        - domain
+        - averageResponseTimeMs
+        - fastestResponseMs
+        - slowestResponseMs
+        - totalTimeMs
+        - retestRecommended
+      properties:
+        assessmentId:
+          type: string
+          format: uuid
+        domain:
+          type: string
+          enum: [IQ, EQ, DQ, AQ]
+        averageResponseTimeMs:
+          type: number
+        fastestResponseMs:
+          type: number
+        slowestResponseMs:
+          type: number
+        totalTimeMs:
+          type: number
+        consistencyScore:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: Only for Likert assessments
+        contradictionCount:
+          type: integer
+          description: Number of contradictory pairs found
+        totalPairsChecked:
+          type: integer
+        contradictoryPairs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContradictoryPair'
+        retestRecommended:
+          type: boolean
+        retestReason:
+          type: string
+          description: Why retest is recommended
+
+    ContradictoryPair:
+      type: object
+      required:
+        - item1Id
+        - item2Id
+        - item1Response
+        - item2Response
+        - expectedPattern
+        - reason
+      properties:
+        item1Id:
+          type: string
+        item2Id:
+          type: string
+        item1Response:
+          type: number
+        item2Response:
+          type: number
+        expectedPattern:
+          type: string
+          description: Expected relationship (e.g., "should_differ", "should_match")
+        reason:
+          type: string
+
+    ConsistencyCheckRequest:
+      type: object
+      required:
+        - assessmentId
+        - domain
+      properties:
+        assessmentId:
+          type: string
+          format: uuid
+        domain:
+          type: string
+          enum: [EQ, DQ, AQ]
+          description: Only Likert domains (IQ is multiple choice)
+
+    ConsistencyCheckResult:
+      type: object
+      required:
+        - consistencyScore
+        - contradictionCount
+        - totalPairsChecked
+        - retestRecommended
+      properties:
+        consistencyScore:
+          type: number
+          minimum: 0
+          maximum: 100
+        contradictionCount:
+          type: integer
+        totalPairsChecked:
+          type: integer
+        contradictoryPairs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContradictoryPair'
+        retestRecommended:
+          type: boolean
+        retestReason:
+          type: string
+
+    CareerMatchRequest:
+      type: object
+      required:
+        - scores
+      properties:
+        scores:
+          $ref: '#/components/schemas/RadarChartData'
+
+    CareerMatchResult:
+      type: object
+      required:
+        - matches
+      properties:
+        matches:
+          type: array
+          items:
+            $ref: '#/components/schemas/CareerMatch'
+
+    CareerMatch:
+      type: object
+      required:
+        - career
+        - intersectionZones
+        - rationale
+        - matchStrength
+      properties:
+        career:
+          $ref: '#/components/schemas/Career'
+        intersectionZones:
+          type: array
+          items:
+            type: string
+          description: Which Ikigai zones this career appears in
+        rationale:
+          type: string
+        matchStrength:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: How well scores match career thresholds
+
+    Career:
+      type: object
+      required:
+        - id
+        - name
+        - category
+        - description
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          example: Clinical Psychologist
+        category:
+          type: string
+          example: Healthcare
+        description:
+          type: string
+
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: Error code for client handling
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          description: Additional error context

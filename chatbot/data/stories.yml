@@ -1,0 +1,35 @@
+version: "3.1"
+
+stories:
+- story: greet and start assessment
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: start_assessment
+  - action: utter_start_assessment
+  - intent: affirm
+  - action: action_start_assessment
+
+- story: ask about assessment
+  steps:
+  - intent: ask_about_assessment
+  - action: utter_assessment_info
+  - intent: start_assessment
+  - action: utter_start_assessment
+  - intent: affirm
+  - action: action_start_assessment
+
+- story: view results
+  steps:
+  - intent: view_results
+  - action: action_show_results
+
+- story: ask for help
+  steps:
+  - intent: ask_help
+  - action: utter_help
+
+- story: goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye

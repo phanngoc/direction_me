@@ -1,0 +1,41 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - start_assessment
+  - ask_about_assessment
+  - view_results
+  - ask_help
+  - affirm
+  - deny
+
+entities:
+  - user_name
+  - assessment_type
+
+responses:
+  utter_greet:
+    - text: "Xin chào! Tôi là trợ lý đánh giá nghề nghiệp MyWay. Tôi có thể giúp bạn khám phá điểm mạnh và định hướng nghề nghiệp của mình."
+  
+  utter_goodbye:
+    - text: "Cảm ơn bạn đã sử dụng MyWay! Chúc bạn thành công trên con đường nghề nghiệp."
+  
+  utter_start_assessment:
+    - text: "Tuyệt vời! Tôi sẽ hướng dẫn bạn làm bài đánh giá nghề nghiệp. Bài đánh giá bao gồm 4 phần: IQ, EQ, DQ, và AQ. Bạn có sẵn sàng bắt đầu không?"
+  
+  utter_assessment_info:
+    - text: "Bài đánh giá MyWay giúp bạn khám phá 4 chỉ số quan trọng: IQ (thông minh), EQ (cảm xúc), DQ (số hóa), và AQ (vượt khó). Kết quả sẽ giúp bạn tìm ra nghề nghiệp phù hợp nhất."
+  
+  utter_help:
+    - text: "Tôi có thể giúp bạn: 1) Làm bài đánh giá nghề nghiệp, 2) Xem kết quả đánh giá, 3) Tìm hiểu về các chỉ số IQ, EQ, DQ, AQ. Bạn muốn làm gì?"
+
+actions:
+  - action_start_assessment
+  - action_redirect_to_assessment
+  - action_show_results
+  - action_save_user_info
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

@@ -1,0 +1,26 @@
+version: "3.1"
+
+stories:
+- story: test greet and start assessment
+  steps:
+  - user: "xin chào"
+  - bot: "Xin chào! Tôi là trợ lý đánh giá nghề nghiệp MyWay. Tôi có thể giúp bạn khám phá điểm mạnh và định hướng nghề nghiệp của mình."
+  - user: "tôi muốn làm bài đánh giá"
+  - bot: "Tuyệt vời! Tôi sẽ hướng dẫn bạn làm bài đánh giá nghề nghiệp. Bài đánh giá bao gồm 4 phần: IQ, EQ, DQ, và AQ. Bạn có sẵn sàng bắt đầu không?"
+  - user: "có"
+  - action: action_start_assessment
+
+- story: test ask about assessment
+  steps:
+  - user: "bài đánh giá là gì"
+  - bot: "Bài đánh giá MyWay giúp bạn khám phá 4 chỉ số quan trọng: IQ (thông minh), EQ (cảm xúc), DQ (số hóa), và AQ (vượt khó). Kết quả sẽ giúp bạn tìm ra nghề nghiệp phù hợp nhất."
+
+- story: test ask for help
+  steps:
+  - user: "giúp tôi"
+  - bot: "Tôi có thể giúp bạn: 1) Làm bài đánh giá nghề nghiệp, 2) Xem kết quả đánh giá, 3) Tìm hiểu về các chỉ số IQ, EQ, DQ, AQ. Bạn muốn làm gì?"
+
+- story: test goodbye
+  steps:
+  - user: "tạm biệt"
+  - bot: "Cảm ơn bạn đã sử dụng MyWay! Chúc bạn thành công trên con đường nghề nghiệp."
