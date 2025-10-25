@@ -19,14 +19,14 @@ Hệ thống đánh giá 4 chỉ số IQ, EQ, DQ, AQ và định hướng nghề
 
 ### Tasks
 
-- [ ] T001 Tạo cấu trúc thư mục dự án theo implementation plan trong project root
-- [ ] T002 [P] Setup Python virtual environment trong backend/venv/
-- [ ] T003 [P] Setup Node.js project trong frontend/package.json
-- [ ] T004 [P] Tạo shared/ directory cho types và schemas trong shared/
-- [ ] T005 [P] Setup PostgreSQL database connection trong backend/src/database.py
-- [ ] T006 [P] Tạo requirements.txt cho backend dependencies trong backend/requirements.txt
-- [ ] T007 [P] Tạo package.json cho frontend dependencies trong frontend/package.json
-- [ ] T008 [P] Setup environment configuration files trong .env
+- [x] T001 Tạo cấu trúc thư mục dự án theo implementation plan trong project root
+- [x] T002 [P] Setup Python virtual environment trong backend/venv/
+- [x] T003 [P] Setup Node.js project trong frontend/package.json
+- [x] T004 [P] Tạo shared/ directory cho types và schemas trong shared/
+- [x] T005 [P] Setup PostgreSQL database connection trong backend/src/database.py
+- [x] T006 [P] Tạo requirements.txt cho backend dependencies trong backend/requirements.txt
+- [x] T007 [P] Tạo package.json cho frontend dependencies trong frontend/package.json
+- [x] T008 [P] Setup environment configuration files trong .env
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
@@ -34,25 +34,25 @@ Hệ thống đánh giá 4 chỉ số IQ, EQ, DQ, AQ và định hướng nghề
 
 ### Tasks
 
-- [ ] T009 [P] Tạo database migration scripts trong backend/scripts/
-- [ ] T010 [P] Implement User model trong backend/src/models/user.py
-- [ ] T011 [P] Implement Assessment model trong backend/src/models/assessment.py
-- [ ] T012 [P] Implement AssessmentResult model trong backend/src/models/assessment_result.py
-- [ ] T013 [P] Implement ProfileVector model trong backend/src/models/profile_vector.py
-- [ ] T014 [P] Implement CareerSuggestion model trong backend/src/models/career_suggestion.py
-- [ ] T015 [P] Implement LearningPath model trong backend/src/models/learning_path.py
-- [ ] T016 [P] Implement ProgressTracking model trong backend/src/models/progress_tracking.py
-- [ ] T017 [P] Implement CareerRule model trong backend/src/models/career_rule.py
-- [ ] T018 [P] Implement QuestionBank model trong backend/src/models/question_bank.py
-- [ ] T019 [P] Tạo database indexes theo data-model.md trong backend/scripts/create_indexes.sql
-- [ ] T020 [P] Setup FastAPI application structure trong backend/src/main.py
-- [ ] T021 [P] Setup Next.js application structure trong frontend/src/app/
-- [ ] T022 [P] Tạo shared TypeScript types trong shared/types/index.ts
-- [ ] T023 [P] Tạo shared JSON schemas trong shared/schemas/api.json
-- [ ] T024 [P] Setup authentication middleware trong backend/src/middleware/auth.py
-- [ ] T025 [P] Setup database connection pool trong backend/src/database.py
-- [ ] T026 [P] Tạo utility functions trong backend/src/utils/helpers.py
-- [ ] T027 [P] Tạo utility functions trong frontend/src/utils/helpers.ts
+- [x] T009 [P] Tạo database migration scripts trong backend/scripts/
+- [x] T010 [P] Implement User model trong backend/src/models/user.py
+- [x] T011 [P] Implement Assessment model trong backend/src/models/assessment.py
+- [x] T012 [P] Implement AssessmentResult model trong backend/src/models/assessment_result.py
+- [x] T013 [P] Implement ProfileVector model trong backend/src/models/profile_vector.py
+- [x] T014 [P] Implement CareerSuggestion model trong backend/src/models/career_suggestion.py
+- [x] T015 [P] Implement LearningPath model trong backend/src/models/learning_path.py
+- [x] T016 [P] Implement ProgressTracking model trong backend/src/models/progress_tracking.py
+- [x] T017 [P] Implement CareerRule model trong backend/src/models/career_rule.py
+- [x] T018 [P] Implement QuestionBank model trong backend/src/models/question_bank.py
+- [x] T019 [P] Tạo database indexes theo data-model.md trong backend/scripts/create_indexes.sql
+- [x] T020 [P] Setup FastAPI application structure trong backend/src/main.py
+- [x] T021 [P] Setup Next.js application structure trong frontend/src/app/
+- [x] T022 [P] Tạo shared TypeScript types trong shared/types/index.ts
+- [x] T023 [P] Tạo shared JSON schemas trong shared/schemas/api.json
+- [x] T024 [P] Setup authentication middleware trong backend/src/middleware/auth.py
+- [x] T025 [P] Setup database connection pool trong backend/src/database.py
+- [x] T026 [P] Tạo utility functions trong backend/src/utils/helpers.py
+- [x] T027 [P] Tạo utility functions trong frontend/src/utils/helpers.ts
 
 ## Phase 3: User Story 1 - Đánh giá 4 chỉ số phát triển (P1)
 
@@ -62,19 +62,19 @@ Hệ thống đánh giá 4 chỉ số IQ, EQ, DQ, AQ và định hướng nghề
 
 ### Tasks
 
-- [ ] T028 [P] [US1] Implement UserService trong backend/src/services/user_service.py
-- [ ] T029 [P] [US1] Implement AssessmentService trong backend/src/services/assessment_service.py
-- [ ] T030 [P] [US1] Implement IQ scoring algorithm trong backend/src/algorithms/iq_scoring.py
-- [ ] T031 [P] [US1] Implement EQ scoring algorithm trong backend/src/algorithms/eq_scoring.py
-- [ ] T032 [P] [US1] Implement DQ scoring algorithm trong backend/src/algorithms/dq_scoring.py
-- [ ] T033 [P] [US1] Implement AQ scoring algorithm trong backend/src/algorithms/aq_scoring.py
-- [ ] T034 [US1] Implement assessment API endpoints trong backend/src/api/assessment.py
-- [ ] T035 [US1] Implement user authentication API endpoints trong backend/src/api/auth.py
-- [ ] T036 [US1] Tạo assessment form component trong frontend/src/components/AssessmentForm.tsx
-- [ ] T037 [US1] Tạo question display component trong frontend/src/components/QuestionDisplay.tsx
+- [x] T028 [P] [US1] Implement UserService trong backend/src/services/user_service.py
+- [x] T029 [P] [US1] Implement AssessmentService trong backend/src/services/assessment_service.py
+- [x] T030 [P] [US1] Implement IQ scoring algorithm trong backend/src/algorithms/iq_scoring.py
+- [x] T031 [P] [US1] Implement EQ scoring algorithm trong backend/src/algorithms/eq_scoring.py
+- [x] T032 [P] [US1] Implement DQ scoring algorithm trong backend/src/algorithms/dq_scoring.py
+- [x] T033 [P] [US1] Implement AQ scoring algorithm trong backend/src/algorithms/aq_scoring.py
+- [x] T034 [US1] Implement assessment API endpoints trong backend/src/api/assessment.py
+- [x] T035 [US1] Implement user authentication API endpoints trong backend/src/api/auth.py
+- [x] T036 [US1] Tạo assessment form component trong frontend/src/components/AssessmentForm.tsx
+- [x] T037 [US1] Tạo question display component trong frontend/src/components/QuestionDisplay.tsx
 - [ ] T038 [US1] Tạo results display component trong frontend/src/components/ResultsDisplay.tsx
-- [ ] T039 [US1] Tạo radar chart component trong frontend/src/components/RadarChart.tsx
-- [ ] T040 [US1] Tạo assessment page trong frontend/src/pages/assessment.tsx
+- [x] T039 [US1] Tạo radar chart component trong frontend/src/components/RadarChart.tsx
+- [x] T040 [US1] Tạo assessment page trong frontend/src/pages/assessment.tsx
 - [ ] T041 [US1] Tạo results page trong frontend/src/pages/results.tsx
 - [ ] T042 [US1] Implement API client services trong frontend/src/services/api.ts
 - [ ] T043 [US1] Tạo sample questions data trong backend/data/sample_questions.json
