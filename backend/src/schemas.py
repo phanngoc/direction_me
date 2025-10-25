@@ -1,6 +1,7 @@
 """
 Pydantic schemas for MyWay Career Assessment System.
 """
+from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel, EmailStr, Field
@@ -20,6 +21,21 @@ class UserCreate(UserBase):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+
+
+# Request/Response schemas for API
+class CreateUserRequest(UserCreate):
+    pass
+
+
+class LoginRequest(UserLogin):
+    pass
+
+
+class AuthResponse(BaseModel):
+    access_token: str
+    token_type: str
+    user: "User"
 
 
 class User(UserBase):
@@ -127,7 +143,7 @@ class LearningPathBase(BaseModel):
     projects: List[str]
     habits: List[str]
     timeline_weeks: int = Field(..., gt=0)
-    priority: str = Field(..., regex="^(high|medium|low)$")
+    priority: str = Field(..., pattern="^(high|medium|low)$")
 
 
 class LearningPath(LearningPathBase):
@@ -204,3 +220,45 @@ class ErrorResponse(BaseModel):
     error: str
     message: str
     details: Optional[str] = None
+
+
+# Assessment schemas
+class CreateAssessmentRequest(BaseModel):
+    user_id: str
+    assessment_type: str = Field(..., pattern="^(full|iq|eq|dq|aq)$")
+
+
+class Question(BaseModel):
+    id: str
+    category: str
+    facet: str
+    question_text: str
+    question_type: str
+    difficulty_weight: float
+    reverse_score: bool
+
+
+class Answer(BaseModel):
+    question_id: str
+    answer_value: int = Field(..., ge=1, le=5)
+
+
+class SubmitAnswersRequest(BaseModel):
+    assessment_id: str
+    answers: List[Answer]
+
+
+class Assessment(BaseModel):
+    id: str
+    user_id: str
+    assessment_type: str
+    status: str
+    created_at: datetime
+    completed_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+# Rebuild models to resolve forward references
+AuthResponse.model_rebuild()

@@ -10,10 +10,13 @@ from fastapi.responses import JSONResponse
 import structlog
 
 from .database import init_db, close_db, check_db_health
-from .api import auth, assessment, results, progress, ikigai, careers, learning_path
+from .api import auth, assessment, progress, ikigai, careers, learning_path
 from .middleware.auth import AuthMiddleware
 from .middleware.error_handler import ErrorHandlerMiddleware
 from .utils.logger import setup_logging
+
+# Import all models to ensure relationships are properly configured
+from .models import user, assessment as assessment_model, assessment_result, progress_tracking, career_suggestion, learning_path as learning_path_model, profile_vector, career_rule, question_bank
 
 # Setup logging
 setup_logging()
@@ -64,7 +67,6 @@ app.add_middleware(AuthMiddleware)
 # Include routers
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(assessment.router, prefix="/api/v1/assessments", tags=["Assessment"])
-app.include_router(results.router, prefix="/api/v1/results", tags=["Results"])
 app.include_router(progress.router, prefix="/api/v1/progress", tags=["Progress"])
 app.include_router(ikigai.router, tags=["Ikigai"])
 app.include_router(careers.router, tags=["Careers"])
@@ -103,7 +105,7 @@ async def api_info():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(
-        "main:app",
+        "src.main:app",
         host="0.0.0.0",
         port=8000,
         reload=os.getenv("DEBUG", "false").lower() == "true"

@@ -1,14 +1,15 @@
+'use client';
+
 /**
  * Career Suggestions Page for MyWay Career Assessment System.
  * Displays detailed career information and comparison.
  */
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import Head from 'next/head';
-import CareerSuggestions from '../components/CareerSuggestions';
-import CareerComparison from '../components/CareerComparison';
-import ErrorBoundary from '../components/ErrorBoundary';
-import { apiClient } from '../services/api';
+import { useRouter, useSearchParams } from 'next/navigation';
+import CareerSuggestions from '@/components/CareerSuggestions';
+import CareerComparison from '@/components/CareerComparison';
+import ErrorBoundary from '@/components/ErrorBoundary';
+import { apiClient } from '@/services/api';
 
 interface CareerSuggestion {
   id: string;
@@ -30,7 +31,9 @@ interface CareerRequirements {
 
 const CareersPage: React.FC = () => {
   const router = useRouter();
-  const { assessment_result_id, career } = router.query;
+  const searchParams = useSearchParams();
+  const assessment_result_id = searchParams.get('assessment_result_id');
+  const career = searchParams.get('career');
   
   const [suggestions, setSuggestions] = useState<CareerSuggestion[]>([]);
   const [selectedCareers, setSelectedCareers] = useState<string[]>([]);
@@ -41,11 +44,11 @@ const CareersPage: React.FC = () => {
 
   useEffect(() => {
     if (assessment_result_id) {
-      loadCareerSuggestions(assessment_result_id as string);
+      loadCareerSuggestions(assessment_result_id);
     }
     
     if (career) {
-      loadCareerDetails(career as string);
+      loadCareerDetails(career);
       setViewMode('details');
     }
   }, [assessment_result_id, career]);
@@ -147,11 +150,6 @@ const CareersPage: React.FC = () => {
 
   return (
     <ErrorBoundary>
-      <Head>
-        <title>Gợi ý nghề nghiệp - MyWay</title>
-        <meta name="description" content="Gợi ý nghề nghiệp phù hợp dựa trên kết quả đánh giá Ikigai" />
-      </Head>
-
       <div className="min-h-screen bg-gray-50">
         {/* Header */}
         <div className="bg-white shadow-sm border-b">

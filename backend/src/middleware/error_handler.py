@@ -137,6 +137,22 @@ async def generic_exception_handler(request: Request, exc: Exception):
     )
 
 
+class ErrorHandlerMiddleware:
+    """Error handling middleware"""
+    def __init__(self, app):
+        self.app = app
+    
+    async def __call__(self, scope, receive, send):
+        if scope["type"] == "http":
+            try:
+                await self.app(scope, receive, send)
+            except Exception as exc:
+                # Let FastAPI handle the exception
+                raise exc
+        else:
+            await self.app(scope, receive, send)
+
+
 def setup_exception_handlers(app):
     """Setup all exception handlers for the FastAPI app"""
     app.add_exception_handler(AppException, app_exception_handler)
