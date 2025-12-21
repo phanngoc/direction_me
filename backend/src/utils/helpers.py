@@ -21,6 +21,9 @@ def validate_password(password: str) -> bool:
     if len(password) < 8:
         return False
     
+    if len(password) > 50:
+        return False
+    
     # Check for at least one letter and one number
     has_letter = re.search(r'[a-zA-Z]', password)
     has_number = re.search(r'\d', password)
@@ -159,10 +162,19 @@ def get_category_display_name(category: str) -> str:
 
 
 def get_password_hash(password: str) -> str:
-    """Hash a password using bcrypt."""
-    return pwd_context.hash(password)
+    """Hash a password using bcrypt.
+    
+    Note: bcrypt has a 72-byte limit, so we truncate longer passwords.
+    This is standard practice and doesn't significantly reduce security
+    since 72 bytes provides more than enough entropy.
+    """
+    # Truncate to 72 bytes (bcrypt limit)
+    password_bytes = password.encode('utf-8')[:72]
+    return pwd_context.hash(password_bytes.decode('utf-8', errors='ignore'))
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against its hash."""
-    return pwd_context.verify(plain_password, hashed_password)
+    # Truncate to 72 bytes to match hashing behavior
+    password_bytes = plain_password.encode('utf-8')[:72]
+    return pwd_context.verify(password_bytes.decode('utf-8', errors='ignore'), hashed_password)

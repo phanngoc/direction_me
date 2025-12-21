@@ -61,7 +61,7 @@ export default function RegisterPage() {
     if (!formData.password) {
       errors.password = 'Mật khẩu là bắt buộc';
     } else if (!validatePassword(formData.password)) {
-      errors.password = 'Mật khẩu phải có ít nhất 8 ký tự và bao gồm cả chữ và số';
+      errors.password = 'Mật khẩu phải có 8-24 ký tự và bao gồm cả chữ và số';
     }
     
     if (!formData.full_name.trim()) {
@@ -213,7 +213,7 @@ export default function RegisterPage() {
                 value={formData.password}
                 onChange={handleInputChange}
                 className={`input ${fieldErrors.password ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : ''}`}
-                placeholder="Tối thiểu 8 ký tự, bao gồm chữ và số"
+                placeholder="8-24 ký tự, bao gồm chữ và số"
               />
               {fieldErrors.password && (
                 <p className="mt-1 text-sm text-red-600">{fieldErrors.password}</p>

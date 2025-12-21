@@ -15,7 +15,10 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    password: str = Field(..., min_length=8)
+    # Password validation based on CHARACTER count, not bytes
+    # bcrypt has 72-byte limit, but we validate by characters for better UX
+    # Max 24 chars ensures even 3-byte Unicode chars stay within 72 bytes
+    password: str = Field(..., min_length=8, max_length=24)
 
 
 class UserLogin(BaseModel):
@@ -226,21 +229,6 @@ class ErrorResponse(BaseModel):
 class CreateAssessmentRequest(BaseModel):
     user_id: str
     assessment_type: str = Field(..., pattern="^(full|iq|eq|dq|aq)$")
-
-
-class Question(BaseModel):
-    id: str
-    category: str
-    facet: str
-    question_text: str
-    question_type: str
-    difficulty_weight: float
-    reverse_score: bool
-
-
-class Answer(BaseModel):
-    question_id: str
-    answer_value: int = Field(..., ge=1, le=5)
 
 
 class SubmitAnswersRequest(BaseModel):

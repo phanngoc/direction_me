@@ -27,12 +27,23 @@ security = HTTPBearer()
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against its hash."""
-    return pwd_context.verify(plain_password, hashed_password)
+    # bcrypt has 72-byte limit - truncate at byte level for consistency
+    password_bytes = plain_password.encode('utf-8')[:72]
+    truncated_password = password_bytes.decode('utf-8', errors='ignore')
+    return pwd_context.verify(truncated_password, hashed_password)
 
 
 def get_password_hash(password: str) -> str:
-    """Hash a password."""
-    return pwd_context.hash(password)
+    """Hash a password.
+    
+    Note: bcrypt has a 72-byte limit. We truncate at byte level to ensure
+    consistent hashing/verification. Validation should be done at character
+    level in the schema (max 24 chars to safely fit within 72 bytes for
+    multi-byte Unicode characters).
+    """
+    password_bytes = password.encode('utf-8')[:72]
+    truncated_password = password_bytes.decode('utf-8', errors='ignore')
+    return pwd_context.hash(truncated_password)
 
 
 def create_access_token(data: dict) -> str:
@@ -89,6 +100,12 @@ class AuthMiddleware:
     
     async def __call__(self, scope, receive, send):
         if scope["type"] == "http":
+            # Skip OPTIONS requests (CORS preflight)
+            method = scope.get("method", "")
+            if method == "OPTIONS":
+                await self.app(scope, receive, send)
+                return
+            
             # Skip auth for certain paths
             path = scope["path"]
             if path in ["/", "/health", "/docs", "/redoc", "/openapi.json"]:
