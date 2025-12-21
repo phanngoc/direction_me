@@ -247,17 +247,5 @@ class SubmitAnswersRequest(BaseModel):
     answers: List[Answer]
 
 
-class Assessment(BaseModel):
-    id: UUIDStr
-    user_id: UUIDStr
-    assessment_type: str
-    status: str
-    created_at: datetime
-    completed_at: Optional[datetime] = None
-
-    class Config:
-        from_attributes = True
-
-
 # Rebuild models to resolve forward references
 AuthResponse.model_rebuild()
