@@ -20,9 +20,8 @@ export const validateEmail = (email: string): boolean => {
 };
 
 export const validatePassword = (password: string): boolean => {
-  // Password must be 8-24 characters (character-based, not byte-based)
-  // Max 24 chars ensures Unicode passwords stay within bcrypt's 72-byte limit
-  if (password.length < 8 || password.length > 24) return false;
+  // Password must be 8-50 characters
+  if (password.length < 8 || password.length > 50) return false;
   
   const hasLetter = /[a-zA-Z]/.test(password);
   const hasNumber = /\d/.test(password);

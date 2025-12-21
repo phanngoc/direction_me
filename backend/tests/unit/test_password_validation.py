@@ -1,26 +1,36 @@
 """
-Test cases for password validation - character-based vs byte-based.
+Test cases for password validation - CHARACTER-based validation.
 
-Issue: bcrypt has a 72-byte limit, but validation should be based on 
-character count, not byte count. Unicode characters (like Vietnamese) 
-can take 2-4 bytes per character.
-
-Solution: Limit password to 24 characters max, which ensures even
-3-byte Unicode characters stay within 72 bytes (24 * 3 = 72).
+Password validation is based on CHARACTER count (8-50 chars), not bytes.
+bcrypt's 72-byte limit is handled internally by truncation.
 """
 import pytest
 from pydantic import ValidationError
 
 
 class TestPasswordCharacterValidation:
-    """Test password validation based on characters, not bytes."""
+    """Test password validation based on characters."""
+    
+    def test_simple_password_valid(self):
+        """Simple password like 'Aa@12345678' should be valid."""
+        from src.schemas import CreateUserRequest
+        
+        password = "Aa@12345678"  # 11 characters
+        
+        user = CreateUserRequest(
+            email="test@example.com",
+            password=password,
+            full_name="Test User",
+            age=20
+        )
+        assert user.password == password
+        assert len(user.password) == 11
     
     def test_ascii_password_within_limit(self):
         """ASCII password within character limit should be valid."""
         from src.schemas import CreateUserRequest
         
-        # 24 ASCII characters = 24 bytes (within both limits)
-        password = "a" * 16 + "12345678"  # 24 chars with letters and numbers
+        password = "MyPassword123!"  # 14 characters
         
         user = CreateUserRequest(
             email="test@example.com",
@@ -28,129 +38,29 @@ class TestPasswordCharacterValidation:
             full_name="Test User",
             age=20
         )
-        assert len(user.password) == 24
+        assert len(user.password) == 14
     
-    def test_unicode_password_within_character_limit(self):
-        """Unicode password within character limit should be valid.
-        
-        This is the key test case - Vietnamese characters take 3 bytes each.
-        A 24-character Vietnamese password = 72 bytes (at bcrypt limit).
-        """
+    def test_unicode_password_valid(self):
+        """Unicode password within character limit should be valid."""
         from src.schemas import CreateUserRequest
-        
-        # 16 Vietnamese chars + 8 ASCII = 24 chars total
-        # Vietnamese: ~48 bytes, ASCII: 8 bytes = ~56 bytes (within limit)
-        password = "mậtkhẩu12345678"  # Mix of Vietnamese and ASCII
-        
-        user = CreateUserRequest(
-            email="test@example.com",
-            password=password,
-            full_name="Ngọc Phạn",
-            age=20
-        )
-        # Should validate based on character count, not bytes
-        assert len(user.password) <= 24  # Character limit
-    
-    def test_vietnamese_password_within_new_limit(self):
-        """Vietnamese password within 24 char limit should work.
-        
-        24 Vietnamese chars * 3 bytes = 72 bytes = exactly at bcrypt limit.
-        """
-        from src.schemas import CreateUserRequest
-        
-        # Vietnamese password: each char is ~3 bytes
-        password = "mậtkhẩubảomật12"  # 15 chars, mix of Vietnamese and numbers
-        byte_count = len(password.encode('utf-8'))
-        char_count = len(password)
-        
-        print(f"Password: {password}")
-        print(f"Character count: {char_count}")
-        print(f"Byte count: {byte_count}")
-        
-        # This should NOT fail validation
-        user = CreateUserRequest(
-            email="test@example.com",
-            password=password,
-            full_name="Ngọc Phạn",
-            age=20
-        )
-        assert char_count <= 24  # Within character limit
-    
-    def test_password_hashing_handles_unicode(self):
-        """Password hashing should handle Unicode passwords correctly."""
-        from src.middleware.auth import get_password_hash, verify_password
         
         # Vietnamese password
         password = "mậtkhẩubảomật12"
         
-        # Should hash without error
-        hashed = get_password_hash(password)
-        assert hashed is not None
-        assert hashed != password
-        
-        # Should verify correctly
-        assert verify_password(password, hashed) is True
-        assert verify_password("wrong_password", hashed) is False
+        user = CreateUserRequest(
+            email="test@example.com",
+            password=password,
+            full_name="Ngọc Phạn",
+            age=20
+        )
+        assert len(user.password) == len(password)
     
-    def test_long_unicode_password_truncation(self):
-        """Long Unicode passwords should be truncated at byte level for bcrypt.
-        
-        bcrypt limit is 72 bytes, so we truncate at byte level.
-        But validation should still be at character level.
-        """
-        from src.middleware.auth import get_password_hash, verify_password
-        
-        # Create a password that's 30 Vietnamese chars = ~90 bytes
-        password = "mậtkhẩu" * 5  # 35 chars, ~105 bytes
-        byte_count = len(password.encode('utf-8'))
-        
-        print(f"Original password bytes: {byte_count}")
-        
-        # Should hash without error (truncates internally)
-        hashed = get_password_hash(password)
-        assert hashed is not None
-        
-        # Should verify the truncated version
-        assert verify_password(password, hashed) is True
-    
-    def test_password_min_length_characters(self):
-        """Password minimum length should be based on characters."""
+    def test_long_unicode_password_valid(self):
+        """Long Unicode password (up to 50 chars) should be valid."""
         from src.schemas import CreateUserRequest
         
-        # 7 characters - should fail (min is 8)
-        with pytest.raises(ValidationError) as exc_info:
-            CreateUserRequest(
-                email="test@example.com",
-                password="1234567",  # 7 chars
-                full_name="Test User",
-                age=20
-            )
-        assert "min_length" in str(exc_info.value).lower() or "at least 8" in str(exc_info.value).lower()
-    
-    def test_password_max_length_characters(self):
-        """Password maximum length should be based on characters (24 max)."""
-        from src.schemas import CreateUserRequest
-        
-        # 25 characters - should fail (max is 24)
-        with pytest.raises(ValidationError):
-            CreateUserRequest(
-                email="test@example.com",
-                password="a" * 25,  # 25 chars
-                full_name="Test User",
-                age=20
-            )
-    
-    def test_emoji_password(self):
-        """Emoji password (4 bytes per char) should validate by character count."""
-        from src.schemas import CreateUserRequest
-        
-        # Emojis are 4 bytes each
-        # 5 emojis + 7 chars = 12 chars total (within 24 limit)
-        password = "🔐" * 3 + "pass1234"  # 11 chars total
-        byte_count = len(password.encode('utf-8'))
-        char_count = len(password)
-        
-        print(f"Emoji password bytes: {byte_count}, chars: {char_count}")
+        # 40 character Vietnamese password
+        password = "mậtkhẩu" * 5 + "12345"  # 40 chars
         
         user = CreateUserRequest(
             email="test@example.com",
@@ -158,21 +68,126 @@ class TestPasswordCharacterValidation:
             full_name="Test User",
             age=20
         )
-        assert len(user.password) == char_count
+        assert len(user.password) == 40
+    
+    def test_password_hashing_handles_unicode(self):
+        """Password hashing should handle Unicode passwords correctly."""
+        from src.utils.bcrypt_compat import get_password_hash, verify_password
+        
+        password = "Aa@12345678"
+        
+        hashed = get_password_hash(password)
+        assert hashed is not None
+        assert hashed != password
+        assert hashed.startswith("$2")  # bcrypt hash prefix
+        
+        assert verify_password(password, hashed) is True
+        assert verify_password("wrong_password", hashed) is False
+    
+    def test_vietnamese_password_hashing(self):
+        """Vietnamese password should hash and verify correctly."""
+        from src.utils.bcrypt_compat import get_password_hash, verify_password
+        
+        password = "mậtkhẩubảomật123"
+        
+        hashed = get_password_hash(password)
+        assert verify_password(password, hashed) is True
+    
+    def test_long_password_truncation(self):
+        """Long passwords should be truncated at 72 bytes internally."""
+        from src.utils.bcrypt_compat import get_password_hash, verify_password
+        
+        # Create password longer than 72 bytes
+        password = "a" * 100  # 100 bytes
+        
+        # Should hash without error
+        hashed = get_password_hash(password)
+        assert hashed is not None
+        
+        # Should verify correctly
+        assert verify_password(password, hashed) is True
+    
+    def test_password_min_length(self):
+        """Password minimum length should be 8 characters."""
+        from src.schemas import CreateUserRequest
+        
+        with pytest.raises(ValidationError):
+            CreateUserRequest(
+                email="test@example.com",
+                password="1234567",  # 7 chars - too short
+                full_name="Test User",
+                age=20
+            )
+    
+    def test_password_max_length(self):
+        """Password maximum length should be 50 characters."""
+        from src.schemas import CreateUserRequest
+        
+        with pytest.raises(ValidationError):
+            CreateUserRequest(
+                email="test@example.com",
+                password="a" * 51,  # 51 chars - too long
+                full_name="Test User",
+                age=20
+            )
+    
+    def test_password_exactly_8_chars(self):
+        """Password with exactly 8 characters should be valid."""
+        from src.schemas import CreateUserRequest
+        
+        password = "Pass1234"  # Exactly 8 chars
+        
+        user = CreateUserRequest(
+            email="test@example.com",
+            password=password,
+            full_name="Test User",
+            age=20
+        )
+        assert len(user.password) == 8
+    
+    def test_password_exactly_50_chars(self):
+        """Password with exactly 50 characters should be valid."""
+        from src.schemas import CreateUserRequest
+        
+        password = "a" * 50  # Exactly 50 chars
+        
+        user = CreateUserRequest(
+            email="test@example.com",
+            password=password,
+            full_name="Test User",
+            age=20
+        )
+        assert len(user.password) == 50
+    
+    def test_emoji_password(self):
+        """Emoji password should validate by character count."""
+        from src.schemas import CreateUserRequest
+        
+        password = "🔐🔐🔐pass123"
+        
+        user = CreateUserRequest(
+            email="test@example.com",
+            password=password,
+            full_name="Test User",
+            age=20
+        )
+        assert len(user.password) == len(password)
+        assert len(user.password) >= 8  # At least 8 chars
 
 
 class TestPasswordHashingConsistency:
-    """Test that password hashing is consistent for Unicode."""
+    """Test that password hashing is consistent."""
     
     def test_same_password_verifies_correctly(self):
         """Same password should always verify against its hash."""
-        from src.middleware.auth import get_password_hash, verify_password
+        from src.utils.bcrypt_compat import get_password_hash, verify_password
         
         passwords = [
+            "Aa@12345678",
             "simple12345",
             "mậtkhẩu12345",
             "パスワード12345",
-            "🔐secure🔐1",
+            "🔐secure🔐123",
             "mixedViệt123",
         ]
         
@@ -180,19 +195,69 @@ class TestPasswordHashingConsistency:
             hashed = get_password_hash(password)
             assert verify_password(password, hashed), f"Failed for: {password}"
     
+    def test_different_passwords_different_hashes(self):
+        """Different passwords should produce different hashes."""
+        from src.utils.bcrypt_compat import get_password_hash
+        
+        hash1 = get_password_hash("password123")
+        hash2 = get_password_hash("password456")
+        
+        assert hash1 != hash2
+    
+    def test_same_password_different_hashes(self):
+        """Same password should produce different hashes (due to salt)."""
+        from src.utils.bcrypt_compat import get_password_hash
+        
+        password = "Aa@12345678"
+        hash1 = get_password_hash(password)
+        hash2 = get_password_hash(password)
+        
+        # Hashes should be different due to random salt
+        assert hash1 != hash2
+    
     def test_truncated_passwords_match(self):
         """Passwords truncated at 72 bytes should match."""
-        from src.middleware.auth import get_password_hash, verify_password
+        from src.utils.bcrypt_compat import get_password_hash, verify_password
         
         # Create password longer than 72 bytes
-        base = "mậtkhẩu"  # 7 chars, 21 bytes
-        password = base * 10  # 70 chars, 210 bytes
+        password = "mậtkhẩu" * 20  # ~420 bytes
         
         hashed = get_password_hash(password)
         
         # Original should verify
         assert verify_password(password, hashed)
         
-        # Truncated version should also verify (same first 72 bytes)
+        # Truncated version should also verify
         truncated = password.encode('utf-8')[:72].decode('utf-8', errors='ignore')
         assert verify_password(truncated, hashed)
+
+
+class TestValidatePasswordLength:
+    """Test validate_password_length function."""
+    
+    def test_valid_password_length(self):
+        """Valid password length should not raise."""
+        from src.utils.bcrypt_compat import validate_password_length
+        
+        # Should not raise
+        validate_password_length("Aa@12345678")
+        validate_password_length("a" * 50)
+        validate_password_length("mậtkhẩu123")
+    
+    def test_password_too_short(self):
+        """Password too short should raise ValueError."""
+        from src.utils.bcrypt_compat import validate_password_length
+        
+        with pytest.raises(ValueError) as exc_info:
+            validate_password_length("short")
+        
+        assert "too short" in str(exc_info.value).lower()
+    
+    def test_password_too_long(self):
+        """Password too long should raise ValueError."""
+        from src.utils.bcrypt_compat import validate_password_length
+        
+        with pytest.raises(ValueError) as exc_info:
+            validate_password_length("a" * 51)
+        
+        assert "too long" in str(exc_info.value).lower()

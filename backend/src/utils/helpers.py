@@ -4,10 +4,14 @@ Utility functions for MyWay Career Assessment System.
 import re
 from typing import List, Dict, Any
 from datetime import datetime, timedelta
-from passlib.context import CryptContext
 
-# Password hashing context
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Import bcrypt functions from compatibility module
+from .bcrypt_compat import (
+    BCRYPT_MAX_BYTES,
+    validate_password_length as validate_password_bytes,
+    get_password_hash,
+    verify_password,
+)
 
 
 def validate_email(email: str) -> bool:
@@ -17,11 +21,15 @@ def validate_email(email: str) -> bool:
 
 
 def validate_password(password: str) -> bool:
-    """Validate password strength."""
+    """Validate password strength.
+    
+    Password must be 8-24 characters and contain at least one letter and one number.
+    Max 24 chars ensures Unicode passwords stay within bcrypt's 72-byte limit.
+    """
     if len(password) < 8:
         return False
     
-    if len(password) > 50:
+    if len(password) > 24:
         return False
     
     # Check for at least one letter and one number
@@ -161,20 +169,29 @@ def get_category_display_name(category: str) -> str:
     return category_names.get(category, category)
 
 
-def get_password_hash(password: str) -> str:
-    """Hash a password using bcrypt.
-    
-    Note: bcrypt has a 72-byte limit, so we truncate longer passwords.
-    This is standard practice and doesn't significantly reduce security
-    since 72 bytes provides more than enough entropy.
-    """
-    # Truncate to 72 bytes (bcrypt limit)
-    password_bytes = password.encode('utf-8')[:72]
-    return pwd_context.hash(password_bytes.decode('utf-8', errors='ignore'))
-
-
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a password against its hash."""
-    # Truncate to 72 bytes to match hashing behavior
-    password_bytes = plain_password.encode('utf-8')[:72]
-    return pwd_context.verify(password_bytes.decode('utf-8', errors='ignore'), hashed_password)
+# Re-export bcrypt functions for backward compatibility
+# These are imported from bcrypt_compat module
+__all__ = [
+    'validate_email',
+    'validate_password',
+    'validate_password_bytes',
+    'get_password_hash',
+    'verify_password',
+    'normalize_score',
+    'calculate_percentage',
+    'format_datetime',
+    'parse_datetime',
+    'generate_uuid',
+    'sanitize_string',
+    'validate_age',
+    'calculate_age_from_birthdate',
+    'chunk_list',
+    'merge_dicts',
+    'safe_get',
+    'is_valid_uuid',
+    'truncate_string',
+    'format_score',
+    'calculate_improvement',
+    'get_facet_display_name',
+    'get_category_display_name',
+]

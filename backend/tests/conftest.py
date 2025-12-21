@@ -75,6 +75,33 @@ async def async_db_session(mock_db_session):
 
 
 # ============================================================================
+# HTTP Client Fixtures
+# ============================================================================
+
+@pytest.fixture
+async def client():
+    """Create an HTTP client for integration tests."""
+    import httpx
+    from backend.src.main import app
+    
+    # Use AsyncClient with ASGI transport for FastAPI
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=app),
+        base_url="http://testserver"
+    ) as ac:
+        yield ac
+
+
+@pytest.fixture
+async def db():
+    """Create a database session for integration tests."""
+    from backend.src.database import AsyncSessionLocal
+    
+    async with AsyncSessionLocal() as session:
+        yield session
+
+
+# ============================================================================
 # Profile Vector Fixtures
 # ============================================================================
 

@@ -22,6 +22,7 @@ router = APIRouter()
 
 
 @router.post("/", response_model=AssessmentSchema)
+@router.post("", response_model=AssessmentSchema)  # Handle both with and without trailing slash
 async def create_assessment(
     assessment_data: CreateAssessmentRequest,
     current_user: User = Depends(get_current_user),
