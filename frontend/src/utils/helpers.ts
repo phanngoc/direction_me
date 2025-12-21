@@ -20,7 +20,8 @@ export const validateEmail = (email: string): boolean => {
 };
 
 export const validatePassword = (password: string): boolean => {
-  if (password.length < 8) return false;
+  // Password must be 8-50 characters
+  if (password.length < 8 || password.length > 50) return false;
   
   const hasLetter = /[a-zA-Z]/.test(password);
   const hasNumber = /\d/.test(password);

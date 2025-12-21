@@ -13,23 +13,27 @@ class TestIQScoringAlgorithm:
     """Test IQ scoring algorithm."""
     
     def test_calculate_iq_score_basic(self):
-        """Test basic IQ score calculation."""
-        # Mock questions
+        """Test basic IQ score calculation with all facets."""
+        # Mock questions for all 4 facets
         questions = [
             Mock(id="q1", category="IQ", facet="LR", difficulty_weight=1.0, question_type="MCQ"),
-            Mock(id="q2", category="IQ", facet="NR", difficulty_weight=1.2, question_type="MCQ"),
+            Mock(id="q2", category="IQ", facet="NR", difficulty_weight=1.0, question_type="MCQ"),
+            Mock(id="q3", category="IQ", facet="VR", difficulty_weight=1.0, question_type="MCQ"),
+            Mock(id="q4", category="IQ", facet="SR", difficulty_weight=1.0, question_type="MCQ"),
         ]
         
-        # Mock answers (all correct)
+        # Mock answers (all correct - answer_value=1 means correct for MCQ)
         answers = [
             {"question_id": "q1", "answer_value": 1},
             {"question_id": "q2", "answer_value": 1},
+            {"question_id": "q3", "answer_value": 1},
+            {"question_id": "q4", "answer_value": 1},
         ]
         
         result = IQScoringAlgorithm.calculate_iq_score(answers, questions)
         
         assert "iq_score" in result
-        assert result["iq_score"] == 100.0  # All correct answers
+        assert result["iq_score"] == 100.0  # All correct answers across all facets
         assert "iq_lr" in result
         assert "iq_nr" in result
         assert "iq_vr" in result
@@ -37,15 +41,20 @@ class TestIQScoringAlgorithm:
     
     def test_calculate_iq_score_partial(self):
         """Test IQ score calculation with partial answers."""
+        # Questions for all 4 facets
         questions = [
             Mock(id="q1", category="IQ", facet="LR", difficulty_weight=1.0, question_type="MCQ"),
             Mock(id="q2", category="IQ", facet="NR", difficulty_weight=1.0, question_type="MCQ"),
+            Mock(id="q3", category="IQ", facet="VR", difficulty_weight=1.0, question_type="MCQ"),
+            Mock(id="q4", category="IQ", facet="SR", difficulty_weight=1.0, question_type="MCQ"),
         ]
         
-        # Only one correct answer
+        # Half correct answers
         answers = [
-            {"question_id": "q1", "answer_value": 1},
-            {"question_id": "q2", "answer_value": 0},
+            {"question_id": "q1", "answer_value": 1},  # Correct
+            {"question_id": "q2", "answer_value": 0},  # Incorrect
+            {"question_id": "q3", "answer_value": 1},  # Correct
+            {"question_id": "q4", "answer_value": 0},  # Incorrect
         ]
         
         result = IQScoringAlgorithm.calculate_iq_score(answers, questions)
@@ -53,6 +62,8 @@ class TestIQScoringAlgorithm:
         assert result["iq_score"] == 50.0  # Half correct
         assert result["iq_lr"] == 100.0
         assert result["iq_nr"] == 0.0
+        assert result["iq_vr"] == 100.0
+        assert result["iq_sr"] == 0.0
     
     def test_validate_answers(self):
         """Test answer validation."""
@@ -81,72 +92,90 @@ class TestEQScoringAlgorithm:
     """Test EQ scoring algorithm."""
     
     def test_calculate_eq_score_basic(self):
-        """Test basic EQ score calculation."""
+        """Test basic EQ score calculation with all facets."""
+        # Questions for all 4 EQ facets
         questions = [
-            Mock(id="q1", category="EQ", facet="Empathy", reverse_score=False, question_type="Likert"),
-            Mock(id="q2", category="EQ", facet="Social", reverse_score=False, question_type="Likert"),
+            Mock(id="q1", category="EQ", facet="empathy", reverse_score=False, question_type="Likert"),
+            Mock(id="q2", category="EQ", facet="social", reverse_score=False, question_type="Likert"),
+            Mock(id="q3", category="EQ", facet="self_awareness", reverse_score=False, question_type="Likert"),
+            Mock(id="q4", category="EQ", facet="self_regulation", reverse_score=False, question_type="Likert"),
         ]
         
-        # High scores (5 on Likert scale)
+        # High scores (5 on Likert scale) - normalized: 25*(5-1) = 100
         answers = [
             {"question_id": "q1", "answer_value": 5},
             {"question_id": "q2", "answer_value": 5},
+            {"question_id": "q3", "answer_value": 5},
+            {"question_id": "q4", "answer_value": 5},
         ]
         
         result = EQScoringAlgorithm.calculate_eq_score(answers, questions)
         
         assert "eq_score" in result
-        assert result["eq_score"] == 100.0  # Maximum score
+        assert result["eq_score"] == 100.0  # Maximum score across all facets
         assert "eq_empathy" in result
         assert "eq_social" in result
     
     def test_calculate_eq_score_reverse(self):
         """Test EQ score calculation with reverse scoring."""
         questions = [
-            Mock(id="q1", category="EQ", facet="Empathy", reverse_score=True, question_type="Likert"),
+            Mock(id="q1", category="EQ", facet="empathy", reverse_score=True, question_type="Likert"),
         ]
         
-        # Low score (1) should become high score (5) after reverse
+        # Low score (1) should become high score (5) after reverse: 6-1=5, then 25*(5-1)=100
         answers = [
             {"question_id": "q1", "answer_value": 1},
         ]
         
         result = EQScoringAlgorithm.calculate_eq_score(answers, questions)
         
+        # Only empathy facet has a question, so it gets 100, others get 0
+        # Overall score = (100 + 0 + 0 + 0) / 4 = 25
         assert result["eq_empathy"] == 100.0  # Reversed from 1 to 5
     
     def test_calculate_eq_score_mixed(self):
         """Test EQ score calculation with mixed scores."""
+        # Questions for all 4 facets
         questions = [
-            Mock(id="q1", category="EQ", facet="Empathy", reverse_score=False, question_type="Likert"),
-            Mock(id="q2", category="EQ", facet="Social", reverse_score=False, question_type="Likert"),
+            Mock(id="q1", category="EQ", facet="empathy", reverse_score=False, question_type="Likert"),
+            Mock(id="q2", category="EQ", facet="social", reverse_score=False, question_type="Likert"),
+            Mock(id="q3", category="EQ", facet="self_awareness", reverse_score=False, question_type="Likert"),
+            Mock(id="q4", category="EQ", facet="self_regulation", reverse_score=False, question_type="Likert"),
         ]
         
-        # Mixed scores
+        # Mixed scores: 3 -> 25*(3-1)=50, 4 -> 25*(4-1)=75
         answers = [
-            {"question_id": "q1", "answer_value": 3},  # Middle score
-            {"question_id": "q2", "answer_value": 4},  # High score
+            {"question_id": "q1", "answer_value": 3},  # 50
+            {"question_id": "q2", "answer_value": 4},  # 75
+            {"question_id": "q3", "answer_value": 3},  # 50
+            {"question_id": "q4", "answer_value": 4},  # 75
         ]
         
         result = EQScoringAlgorithm.calculate_eq_score(answers, questions)
         
-        assert 50.0 <= result["eq_score"] <= 75.0  # Between middle and high
+        # Average: (50 + 75 + 50 + 75) / 4 = 62.5
+        assert result["eq_score"] == 62.5
 
 
 class TestDQScoringAlgorithm:
     """Test DQ scoring algorithm."""
     
     def test_calculate_dq_score_basic(self):
-        """Test basic DQ score calculation."""
+        """Test basic DQ score calculation with all facets."""
+        # Questions for all 4 DQ facets
         questions = [
-            Mock(id="q1", category="DQ", facet="InfoLiteracy", reverse_score=False, question_type="Likert"),
-            Mock(id="q2", category="DQ", facet="Creativity", reverse_score=False, question_type="Likert"),
+            Mock(id="q1", category="DQ", facet="info_literacy", reverse_score=False, question_type="Likert"),
+            Mock(id="q2", category="DQ", facet="creativity", reverse_score=False, question_type="Likert"),
+            Mock(id="q3", category="DQ", facet="safety", reverse_score=False, question_type="Likert"),
+            Mock(id="q4", category="DQ", facet="collaboration", reverse_score=False, question_type="Likert"),
         ]
         
-        # High scores
+        # High scores (5 on Likert scale) - normalized: 25*(5-1) = 100
         answers = [
             {"question_id": "q1", "answer_value": 5},
             {"question_id": "q2", "answer_value": 5},
+            {"question_id": "q3", "answer_value": 5},
+            {"question_id": "q4", "answer_value": 5},
         ]
         
         result = DQScoringAlgorithm.calculate_dq_score(answers, questions)
@@ -161,16 +190,21 @@ class TestAQScoringAlgorithm:
     """Test AQ scoring algorithm."""
     
     def test_calculate_aq_score_basic(self):
-        """Test basic AQ score calculation."""
+        """Test basic AQ score calculation with all facets."""
+        # Questions for all 4 AQ facets
         questions = [
-            Mock(id="q1", category="AQ", facet="Control", reverse_score=False, question_type="Likert"),
-            Mock(id="q2", category="AQ", facet="Ownership", reverse_score=False, question_type="Likert"),
+            Mock(id="q1", category="AQ", facet="control", reverse_score=False, question_type="Likert"),
+            Mock(id="q2", category="AQ", facet="ownership", reverse_score=False, question_type="Likert"),
+            Mock(id="q3", category="AQ", facet="reach", reverse_score=False, question_type="Likert"),
+            Mock(id="q4", category="AQ", facet="endurance", reverse_score=False, question_type="Likert"),
         ]
         
-        # High scores
+        # High scores (5 on Likert scale) - normalized: 25*(5-1) = 100
         answers = [
             {"question_id": "q1", "answer_value": 5},
             {"question_id": "q2", "answer_value": 5},
+            {"question_id": "q3", "answer_value": 5},
+            {"question_id": "q4", "answer_value": 5},
         ]
         
         result = AQScoringAlgorithm.calculate_aq_score(answers, questions)
@@ -183,16 +217,17 @@ class TestAQScoringAlgorithm:
     def test_calculate_aq_score_reverse(self):
         """Test AQ score calculation with reverse scoring."""
         questions = [
-            Mock(id="q1", category="AQ", facet="Control", reverse_score=True, question_type="Likert"),
+            Mock(id="q1", category="AQ", facet="control", reverse_score=True, question_type="Likert"),
         ]
         
-        # Low score should become high score after reverse
+        # Low score (1) should become high score (5) after reverse: 6-1=5, then 25*(5-1)=100
         answers = [
             {"question_id": "q1", "answer_value": 1},
         ]
         
         result = AQScoringAlgorithm.calculate_aq_score(answers, questions)
         
+        # Only control facet has a question, so it gets 100
         assert result["aq_control"] == 100.0
 
 

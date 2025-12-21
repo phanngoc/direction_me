@@ -25,7 +25,15 @@ export default function AssessmentPage() {
 
       // Check if user is authenticated
       const token = getFromStorage<string>(STORAGE_KEYS.ACCESS_TOKEN);
+      const userData = getFromStorage(STORAGE_KEYS.USER_DATA);
+      
       if (!token) {
+        router.push('/login');
+        return;
+      }
+
+      if (!userData || !userData.id) {
+        // If no user data, redirect to login to refresh
         router.push('/login');
         return;
       }
@@ -37,7 +45,10 @@ export default function AssessmentPage() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ user_id: 'current_user' }),
+        body: JSON.stringify({ 
+          user_id: userData.id,
+          assessment_type: 'full'
+        }),
       });
 
       if (!assessmentResponse.ok) {

@@ -5,15 +5,26 @@ import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 import structlog
 
 from .database import init_db, close_db, check_db_health
-from .api import auth, assessment, results, progress, ikigai, careers, learning_path
+from .api import auth, assessment, progress, ikigai, careers, learning_path
 from .middleware.auth import AuthMiddleware
 from .middleware.error_handler import ErrorHandlerMiddleware
 from .utils.logger import setup_logging
+
+# Import all models to ensure relationships are properly configured
+# Import in dependency order to avoid circular import issues
+from .models import user
+from .models import assessment as assessment_model
+from .models import assessment_result
+from .models import progress_tracking
+from .models import career_suggestion
+from .models import learning_path as learning_path_model
+from .models import profile_vector
+from .models import career_rule
+from .models import question_bank
 
 # Setup logging
 setup_logging()
@@ -44,18 +55,25 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Add middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=os.getenv("BACKEND_CORS_ORIGINS", "http://localhost:3000").split(","),
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Add middleware (order matters - CORS must be first to handle preflight requests)
+# Get CORS origins from env or use permissive defaults for development
+import json
+cors_env = os.getenv("BACKEND_CORS_ORIGINS", "")
+try:
+    # Try parsing as JSON array first
+    cors_origins = json.loads(cors_env) if cors_env else ["*"]
+except json.JSONDecodeError:
+    # Fall back to comma-separated string
+    cors_origins = [origin.strip() for origin in cors_env.split(",") if origin.strip()] or ["*"]
 
 app.add_middleware(
-    TrustedHostMiddleware,
-    allowed_hosts=["localhost", "127.0.0.1", "*.myway.com"]
+    CORSMiddleware,
+    allow_origins=cors_origins,
+    allow_credentials=True if cors_origins != ["*"] else False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+    max_age=600,
 )
 
 app.add_middleware(ErrorHandlerMiddleware)
@@ -64,7 +82,6 @@ app.add_middleware(AuthMiddleware)
 # Include routers
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(assessment.router, prefix="/api/v1/assessments", tags=["Assessment"])
-app.include_router(results.router, prefix="/api/v1/results", tags=["Results"])
 app.include_router(progress.router, prefix="/api/v1/progress", tags=["Progress"])
 app.include_router(ikigai.router, tags=["Ikigai"])
 app.include_router(careers.router, tags=["Careers"])
@@ -103,7 +120,7 @@ async def api_info():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(
-        "main:app",
+        "src.main:app",
         host="0.0.0.0",
         port=8000,
         reload=os.getenv("DEBUG", "false").lower() == "true"

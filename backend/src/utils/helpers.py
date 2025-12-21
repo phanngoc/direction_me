@@ -5,6 +5,14 @@ import re
 from typing import List, Dict, Any
 from datetime import datetime, timedelta
 
+# Import bcrypt functions from compatibility module
+from .bcrypt_compat import (
+    BCRYPT_MAX_BYTES,
+    validate_password_length as validate_password_bytes,
+    get_password_hash,
+    verify_password,
+)
+
 
 def validate_email(email: str) -> bool:
     """Validate email format."""
@@ -13,8 +21,15 @@ def validate_email(email: str) -> bool:
 
 
 def validate_password(password: str) -> bool:
-    """Validate password strength."""
+    """Validate password strength.
+    
+    Password must be 8-24 characters and contain at least one letter and one number.
+    Max 24 chars ensures Unicode passwords stay within bcrypt's 72-byte limit.
+    """
     if len(password) < 8:
+        return False
+    
+    if len(password) > 24:
         return False
     
     # Check for at least one letter and one number
@@ -152,3 +167,31 @@ def get_category_display_name(category: str) -> str:
         'AQ': 'Adversity Quotient'
     }
     return category_names.get(category, category)
+
+
+# Re-export bcrypt functions for backward compatibility
+# These are imported from bcrypt_compat module
+__all__ = [
+    'validate_email',
+    'validate_password',
+    'validate_password_bytes',
+    'get_password_hash',
+    'verify_password',
+    'normalize_score',
+    'calculate_percentage',
+    'format_datetime',
+    'parse_datetime',
+    'generate_uuid',
+    'sanitize_string',
+    'validate_age',
+    'calculate_age_from_birthdate',
+    'chunk_list',
+    'merge_dicts',
+    'safe_get',
+    'is_valid_uuid',
+    'truncate_string',
+    'format_score',
+    'calculate_improvement',
+    'get_facet_display_name',
+    'get_category_display_name',
+]

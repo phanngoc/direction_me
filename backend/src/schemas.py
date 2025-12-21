@@ -1,9 +1,22 @@
 """
 Pydantic schemas for MyWay Career Assessment System.
 """
+from __future__ import annotations
 from datetime import datetime
-from typing import List, Optional
-from pydantic import BaseModel, EmailStr, Field
+from typing import List, Optional, Annotated
+from uuid import UUID
+from pydantic import BaseModel, EmailStr, Field, BeforeValidator
+
+
+# Helper to convert UUID to string
+def uuid_to_str(v):
+    if isinstance(v, UUID):
+        return str(v)
+    return v
+
+
+# Type alias for UUID fields that auto-convert to string
+UUIDStr = Annotated[str, BeforeValidator(uuid_to_str)]
 
 
 # User schemas
@@ -14,7 +27,9 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    password: str = Field(..., min_length=8)
+    # Password validation based on CHARACTER count (8-50 chars)
+    # bcrypt's 72-byte limit is handled internally by truncation
+    password: str = Field(..., min_length=8, max_length=50)
 
 
 class UserLogin(BaseModel):
@@ -22,8 +37,23 @@ class UserLogin(BaseModel):
     password: str
 
 
+# Request/Response schemas for API
+class CreateUserRequest(UserCreate):
+    pass
+
+
+class LoginRequest(UserLogin):
+    pass
+
+
+class AuthResponse(BaseModel):
+    access_token: str
+    token_type: str
+    user: "User"
+
+
 class User(UserBase):
-    id: str
+    id: UUIDStr
     created_at: datetime
     updated_at: datetime
 
@@ -33,7 +63,7 @@ class User(UserBase):
 
 # Assessment schemas
 class AssessmentBase(BaseModel):
-    user_id: str
+    user_id: UUIDStr
 
 
 class AssessmentCreate(AssessmentBase):
@@ -41,7 +71,7 @@ class AssessmentCreate(AssessmentBase):
 
 
 class Assessment(AssessmentBase):
-    id: str
+    id: UUIDStr
     status: str
     started_at: datetime
     completed_at: Optional[datetime]
@@ -63,7 +93,7 @@ class QuestionBase(BaseModel):
 
 
 class Question(QuestionBase):
-    id: str
+    id: UUIDStr
     options: Optional[List[str]]
 
     class Config:
@@ -72,7 +102,7 @@ class Question(QuestionBase):
 
 # Answer schemas
 class Answer(BaseModel):
-    question_id: str
+    question_id: UUIDStr
     answer_value: int
     answer_text: Optional[str]
 
@@ -96,8 +126,8 @@ class AssessmentResultBase(BaseModel):
 
 
 class AssessmentResult(AssessmentResultBase):
-    id: str
-    assessment_id: str
+    id: UUIDStr
+    assessment_id: UUIDStr
     calculated_at: datetime
 
     class Config:
@@ -113,7 +143,7 @@ class CareerSuggestionBase(BaseModel):
 
 
 class CareerSuggestion(CareerSuggestionBase):
-    id: str
+    id: UUIDStr
     created_at: datetime
 
     class Config:
@@ -127,11 +157,11 @@ class LearningPathBase(BaseModel):
     projects: List[str]
     habits: List[str]
     timeline_weeks: int = Field(..., gt=0)
-    priority: str = Field(..., regex="^(high|medium|low)$")
+    priority: str = Field(..., pattern="^(high|medium|low)$")
 
 
 class LearningPath(LearningPathBase):
-    id: str
+    id: UUIDStr
     created_at: datetime
 
     class Config:
@@ -140,9 +170,9 @@ class LearningPath(LearningPathBase):
 
 # Progress Tracking schemas
 class ProgressTrackingBase(BaseModel):
-    user_id: str
-    assessment_id: str
-    previous_assessment_id: Optional[str]
+    user_id: UUIDStr
+    assessment_id: UUIDStr
+    previous_assessment_id: Optional[UUIDStr] = None
     improvement_iq: Optional[float]
     improvement_eq: Optional[float]
     improvement_dq: Optional[float]
@@ -150,7 +180,7 @@ class ProgressTrackingBase(BaseModel):
 
 
 class ProgressTracking(ProgressTrackingBase):
-    id: str
+    id: UUIDStr
     tracked_at: datetime
 
     class Config:
@@ -204,3 +234,18 @@ class ErrorResponse(BaseModel):
     error: str
     message: str
     details: Optional[str] = None
+
+
+# Assessment schemas
+class CreateAssessmentRequest(BaseModel):
+    user_id: UUIDStr
+    assessment_type: str = Field(..., pattern="^(full|iq|eq|dq|aq)$")
+
+
+class SubmitAnswersRequest(BaseModel):
+    assessment_id: UUIDStr
+    answers: List[Answer]
+
+
+# Rebuild models to resolve forward references
+AuthResponse.model_rebuild()

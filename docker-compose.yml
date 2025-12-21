@@ -5,11 +5,11 @@ services:
   db:
     image: postgres:15
     environment:
-      POSTGRES_DB: myway_chatbot_assessment
+      POSTGRES_DB: myway_assessment
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:
-      - "5432:5432"
+      - "5455:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -22,7 +22,7 @@ services:
   redis:
     image: redis:6
     ports:
-      - "6379:6379"
+      - "6380:6379"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -32,77 +32,77 @@ services:
       retries: 5
 
   # Backend FastAPI
-  backend:
-    build: 
-      context: ./backend
-      dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
-    environment:
-      DATABASE_URL: postgresql://postgres:password@db:5432/myway_chatbot_assessment
-      REDIS_URL: redis://redis:6379
-      SECRET_KEY: dev-secret-key
-      JWT_SECRET_KEY: dev-jwt-secret
-      CORS_ORIGINS: http://localhost:3000
-      RASA_SERVER_URL: http://rasa:5005
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    volumes:
-      - ./backend:/app
-    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+  # backend:
+  #   build: 
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     DATABASE_URL: postgresql://postgres:password@db:5432/myway_chatbot_assessment
+  #     REDIS_URL: redis://redis:6379
+  #     SECRET_KEY: dev-secret-key
+  #     JWT_SECRET_KEY: dev-jwt-secret
+  #     CORS_ORIGINS: http://localhost:3000
+  #     RASA_SERVER_URL: http://rasa:5005
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ./backend:/app
+  #   command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
 
-  # Frontend React
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    environment:
-      REACT_APP_API_URL: http://localhost:8000/v1
-      REACT_APP_WEBSOCKET_URL: ws://localhost:8000/ws
-      REACT_APP_ENVIRONMENT: development
-    depends_on:
-      - backend
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    command: npm start
+  # # Frontend React
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     REACT_APP_API_URL: http://localhost:8000/v1
+  #     REACT_APP_WEBSOCKET_URL: ws://localhost:8000/ws
+  #     REACT_APP_ENVIRONMENT: development
+  #   depends_on:
+  #     - backend
+  #   volumes:
+  #     - ./frontend:/app
+  #     - /app/node_modules
+  #   command: npm start
 
-  # Rasa Chatbot
-  rasa:
-    build:
-      context: ./chatbot
-      dockerfile: Dockerfile
-    ports:
-      - "5005:5005"
-    environment:
-      RASA_SERVER_URL: http://rasa:5005
-      RASA_ACTION_SERVER_URL: http://rasa-actions:5055
-      BACKEND_API_URL: http://backend:8000/v1
-    depends_on:
-      - backend
-    volumes:
-      - ./chatbot:/app
-    command: rasa run --enable-api --cors "*" --port 5005
+  # # Rasa Chatbot
+  # rasa:
+  #   build:
+  #     context: ./chatbot
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "5005:5005"
+  #   environment:
+  #     RASA_SERVER_URL: http://rasa:5005
+  #     RASA_ACTION_SERVER_URL: http://rasa-actions:5055
+  #     BACKEND_API_URL: http://backend:8000/v1
+  #   depends_on:
+  #     - backend
+  #   volumes:
+  #     - ./chatbot:/app
+  #   command: rasa run --enable-api --cors "*" --port 5005
 
-  # Rasa Action Server
-  rasa-actions:
-    build:
-      context: ./chatbot
-      dockerfile: Dockerfile.actions
-    ports:
-      - "5055:5055"
-    environment:
-      BACKEND_API_URL: http://backend:8000/v1
-    depends_on:
-      - backend
-    volumes:
-      - ./chatbot:/app
-    command: rasa run actions --port 5055
+  # # Rasa Action Server
+  # rasa-actions:
+  #   build:
+  #     context: ./chatbot
+  #     dockerfile: Dockerfile.actions
+  #   ports:
+  #     - "5055:5055"
+  #   environment:
+  #     BACKEND_API_URL: http://backend:8000/v1
+  #   depends_on:
+  #     - backend
+  #   volumes:
+  #     - ./chatbot:/app
+  #   command: rasa run actions --port 5055
 
 volumes:
   postgres_data:

@@ -124,20 +124,20 @@ class LearningPathGenerator:
                 'Software Engineer': {
                     'skills': {
                         'foundational': [
-                            {'name': 'Programming Fundamentals', 'weeks': 4},
-                            {'name': 'Version Control', 'weeks': 2}
+                            {'name': 'Programming Fundamentals', 'weeks': 4, 'description': 'Learn core programming concepts'},
+                            {'name': 'Version Control', 'weeks': 2, 'description': 'Master Git and GitHub'}
                         ],
                         'frontend': [
-                            {'name': 'HTML/CSS/JavaScript', 'weeks': 6},
-                            {'name': 'React Framework', 'weeks': 8}
+                            {'name': 'HTML/CSS/JavaScript', 'weeks': 6, 'description': 'Web fundamentals'},
+                            {'name': 'React Framework', 'weeks': 8, 'description': 'Modern frontend development'}
                         ],
                         'backend': [
-                            {'name': 'Node.js/Express', 'weeks': 6},
-                            {'name': 'Database Management', 'weeks': 4}
+                            {'name': 'Node.js/Express', 'weeks': 6, 'description': 'Server-side development'},
+                            {'name': 'Database Management', 'weeks': 4, 'description': 'SQL and NoSQL databases'}
                         ]
                     },
                     'habits': [
-                        {'name': 'Daily Coding Practice', 'frequency': 'daily', 'duration_weeks': 24}
+                        {'name': 'Daily Coding Practice', 'description': 'Practice coding every day', 'frequency': 'daily', 'duration_weeks': 24}
                     ]
                 }
             }

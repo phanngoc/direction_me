@@ -26,7 +26,7 @@ class UserService:
             raise ValueError("Invalid email format")
         
         if not validate_password(password):
-            raise ValueError("Password must be at least 8 characters with letters and numbers")
+            raise ValueError("Password must be 8-50 characters with letters and numbers")
         
         if not (16 <= age <= 25):
             raise ValueError("Age must be between 16 and 25")
